@@ -1,8 +1,10 @@
 import Link from 'next/link';
 import Hero from '@/components/Hero';
 import AnnounceCard from '@/components/AnnounceCard';
+import { CakeIcon, PaletteIcon } from '@/components/Icons';
+import Gallery from '@/components/Gallery';
 import {
-  AGE_GROUPS, ALL_INCLUSIVE, STUDIO, PRICES, TRIAL_PRICE,
+  AGE_GROUPS, ALL_INCLUSIVE, STUDIO, PRICES, TRIAL_PRICE, GROUP_SIZE_MAX,
   lessonsByAge,
 } from '@/lib/data';
 import { getAnnouncements, upcoming } from '@/lib/announcements';
@@ -41,19 +43,23 @@ export default async function HomePage() {
                 усі →
               </Link>
             </div>
-            {announcements.map((a) => (
-              <AnnounceCard key={a.id} item={a} />
-            ))}
+            <div className="cards-grid">
+              {announcements.map((a) => (
+                <AnnounceCard key={a.id} item={a} />
+              ))}
+            </div>
           </>
         )}
 
         {/* Возрастные группы — ядро новой системы студии */}
-        <h2 className="t-h2" style={{ marginTop: 36 }}>Три вікові групи</h2>
+        <h2 className="t-h2" style={{ marginTop: 36 }}>Чотири вікові групи</h2>
         <p className="t-lead">
           У кожної — свій набір напрямів і своя тривалість заняття.
+          Групи невеликі, до {GROUP_SIZE_MAX} дітей: педагог встигає до кожного.
         </p>
 
-        {AGE_GROUPS.filter((g) => g.id !== '9+').map((g) => {
+        <div className="cards-grid">
+        {AGE_GROUPS.map((g) => {
           const count = lessonsByAge(g.id).length;
           const dur = lessonsByAge(g.id)[0]?.dur ?? 60;
           return (
@@ -75,6 +81,7 @@ export default async function HomePage() {
             </Link>
           );
         })}
+        </div>
 
         {/* All Inclusive */}
         <div className="card" style={{ background: 'var(--brand-orange)', border: 0, color: '#fff', marginTop: 20 }}>
@@ -103,39 +110,34 @@ export default async function HomePage() {
         {/* Свята и мастер-классы */}
         <div className="grid-2" style={{ marginTop: 28 }}>
           <Link className="tile" href="/den-narodzhennya">
-            <svg viewBox="0 0 64 64" aria-hidden="true" style={{ width: 34, height: 34 }}>
-              <rect x="12" y="30" width="40" height="24" rx="6" fill="#F73FA6" />
-              <rect x="12" y="30" width="40" height="8" fill="#4FD1D9" />
-              <rect x="30" y="12" width="4" height="16" rx="2" fill="#8A8078" />
-              <circle cx="32" cy="9" r="5" fill="#FBD668" />
-            </svg>
+            <CakeIcon />
             <span className="t">День народження</span>
             <span className="d">від 2000 ₴ · до 15 дітей</span>
           </Link>
 
           <Link className="tile" href="/maister-klasy">
-            <svg viewBox="0 0 64 64" aria-hidden="true" style={{ width: 34, height: 34 }}>
-              <path d="M20 8h24l-4 26a8 8 0 0 1-16 0z" fill="#FBD668" />
-              <rect x="28" y="34" width="8" height="14" fill="#8A8078" />
-              <rect x="18" y="48" width="28" height="8" rx="4" fill="#F26F21" />
-            </svg>
+            <PaletteIcon />
             <span className="t">Майстер-класи</span>
             <span className="d">дітям і дорослим</span>
           </Link>
         </div>
 
+        <Gallery />
+
         {/* Локации */}
         <h2 className="t-h2" style={{ marginTop: 36 }}>Де ми</h2>
-        <div className="card">
-          <div className="t-h3">Раківка</div>
-          <div className="t-small" style={{ marginTop: 6 }}>
-            Основна локація: всі вікові групи, репетиторство
+        <div className="cards-grid">
+          <div className="card">
+            <div className="t-h3">Раківка</div>
+            <div className="t-small" style={{ marginTop: 6 }}>
+              Основна локація: всі вікові групи, репетиторство
+            </div>
           </div>
-        </div>
-        <div className="card">
-          <div className="t-h3">Молодіжний</div>
-          <div className="t-small" style={{ marginTop: 6 }}>
-            вул. Лесі Українки, 37А · англійська, малювання, робототехніка
+          <div className="card">
+            <div className="t-h3">Молодіжний</div>
+            <div className="t-small" style={{ marginTop: 6 }}>
+              вул. Лесі Українки, 37А · англійська, малювання, робототехніка
+            </div>
           </div>
         </div>
 

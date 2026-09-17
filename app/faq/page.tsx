@@ -52,7 +52,16 @@ export default function FaqPage() {
         </div>
 
         <div className="note" style={{ marginTop: 24 }}>
-          Не знайшли відповідь? {STUDIO.phone} або Direct в Instagram.
+          Не знайшли відповіді? Напишіть або зателефонуйте нам — із радістю допоможемо.
+          <br />
+          <a href={STUDIO.phoneHref} style={{ color: 'var(--brand-orange)', fontWeight: 700 }}>
+            {STUDIO.phone}
+          </a>{' '}
+          ·{' '}
+          <a href={STUDIO.instagram} target="_blank" rel="noopener"
+             style={{ color: 'var(--brand-orange)', fontWeight: 700 }}>
+            Direct в Instagram
+          </a>
         </div>
       </div>
 

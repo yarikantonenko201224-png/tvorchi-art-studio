@@ -74,6 +74,15 @@ export const PRICES: Record<Tier, PriceTier> = {
    Это вход в воронку, поэтому фигурирует на всех кнопках записи. */
 export const TRIAL_PRICE = 150;
 
+/* Ориентир по наполняемости: до 8 детей в группе.
+
+   ВАЖНО: это НЕ жёсткий лимит для сайта. Владелица прямо просила не блокировать
+   запись при достижении восьми — «за гроші вмістяться усі». Поэтому публичная
+   часть не показывает счётчик свободных мест и никогда не отказывает в записи.
+   Число используется как преимущество («невеликі групи до 8 дітей») и позже —
+   внутри CRM, чтобы администратор видел, когда пора відкривати другу групу. */
+export const GROUP_SIZE_MAX = 8;
+
 export const ALL_INCLUSIVE = {
   price: 2800,
   promoPrice: 1400,
@@ -362,7 +371,8 @@ export interface MasterClass {
 
 export const MASTER_CLASSES: MasterClass[] = [
   { slug: 'liplennya-plastylin', title: 'Ліплення з пластиліну', kids: { price: 150 }, adults: { price: 150 } },
-  { slug: 'plastylin', title: 'Пластилін', kids: { price: 150 }, adults: { price: 150 } },
+  /* «Пластилін» убран: владелица подтвердила, что это та же услуга,
+     что и «Ліплення з пластиліну». В прайсах она дублировалась. */
   { slug: 'brelky', title: 'Створення брелків', kids: { price: 150, from: true }, adults: { price: 150, from: true } },
   { slug: 'glyna', title: 'Глина', kids: { price: 250 }, adults: { price: 250 } },
   { slug: 'malyuvannya-smoloyu', title: 'Малювання смолою', kids: { price: 300, from: true }, adults: { price: 300, from: true } },
@@ -377,7 +387,9 @@ export const MASTER_CLASSES: MasterClass[] = [
   { slug: 'rozmalovka-futbolky', title: 'Розмальовка футболки', kids: { price: 600 }, adults: { price: 600 } },
   { slug: 'neonove-malyuvannya', title: 'Малювання неонове', kids: { price: 680 }, adults: { price: 680 } },
   { slug: 'bentotort', title: 'Бентоторт', kids: { price: 700 }, adults: { price: 700 } },
-  { slug: 'robototehnika-mk', title: 'Робототехніка', kids: { price: 250 }, adults: null },
+  /* Разовый мастер-класс, не путать с регулярным занятием робототехнікою
+     за 350 ₴ — у них разная длительность и программа. Подписано на странице. */
+  { slug: 'robototehnika-mk', title: 'Робототехніка (майстер-клас)', kids: { price: 250 }, adults: null },
   { slug: 'malyuvannya-na-derevi', title: 'Малювання на дереві', kids: { price: 250 }, adults: null },
   { slug: 'fotoramka', title: 'Створення фоторамки', kids: { price: 450 }, adults: null },
   { slug: 'krystal-art', title: 'Малювання стразами (кристал арт)', kids: { price: 600 }, adults: null },

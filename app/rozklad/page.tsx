@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import {
-  LESSONS, MOLODIZHNY, DAY_SHORT, DAY_FULL, PRICES, ALL_INCLUSIVE,
+  LESSONS, MOLODIZHNY, DAY_SHORT, DAY_FULL, PRICES, ALL_INCLUSIVE, GROUP_SIZE_MAX,
   type DayId,
 } from '@/lib/data';
 
@@ -20,9 +20,13 @@ export default function SchedulePage() {
         </div>
 
         <h1 className="t-h1" style={{ marginTop: 18 }}>Розклад занять</h1>
-        <p className="t-lead">Раківка та Молодіжний. Усі матеріали входять у вартість.</p>
+        <p className="t-lead">
+          Раківка та Молодіжний. Групи до {GROUP_SIZE_MAX} дітей,
+          усі матеріали входять у вартість.
+        </p>
 
         <h2 className="t-h3" style={{ marginTop: 28 }}>Раківка</h2>
+        <div className="schedule-days">
         {DAYS.map((day) => {
           const items = LESSONS.filter((l) => l.day === day);
           if (!items.length) return null;
@@ -51,9 +55,11 @@ export default function SchedulePage() {
             </div>
           );
         })}
+        </div>
 
         <h2 className="t-h3" style={{ marginTop: 32 }}>Молодіжний</h2>
         <p className="t-small" style={{ marginTop: 6 }}>вул. Лесі Українки, 37А</p>
+        <div className="schedule-days">
         {(['mon', 'wed', 'fri'] as DayId[]).map((day) => {
           const items = MOLODIZHNY.filter((l) => l.day === day);
           if (!items.length) return null;
@@ -82,9 +88,10 @@ export default function SchedulePage() {
             </div>
           );
         })}
+        </div>
 
         <h2 className="t-h3" style={{ marginTop: 32 }}>Ціни</h2>
-        <div className="card">
+        <div className="card price-block">
           <div className="t-label">Малювання, ліплення, ранній розвиток, сенсорика, підготовка до школи, англійська</div>
           <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
             <PriceRow label="Разове заняття" value={PRICES.std.single} />
@@ -94,7 +101,7 @@ export default function SchedulePage() {
           </div>
         </div>
 
-        <div className="card">
+        <div className="card price-block">
           <div className="t-label">Робототехніка</div>
           <div style={{ marginTop: 12, display: 'grid', gap: 8 }}>
             <PriceRow label="Разове заняття" value={PRICES.rob.single} />
@@ -102,10 +109,17 @@ export default function SchedulePage() {
             <PriceRow label="Абонемент на 8" value={PRICES.rob.pack8} />
             <PriceRow label="Абонемент на 12" value={PRICES.rob.pack12} />
           </div>
+          <p className="t-small" style={{ marginTop: 12 }}>
+            Це регулярне заняття за програмою курсу. Разовий{' '}
+            <Link href="/maister-klasy" style={{ color: 'var(--brand-orange)', fontWeight: 700 }}>
+              майстер-клас із робототехніки
+            </Link>{' '}
+            коштує 250 ₴ — це інший формат: одна зустріч без продовження.
+          </p>
         </div>
 
         <div
-          className="card"
+          className="card price-block"
           style={{ background: 'var(--brand-orange)', border: 0, color: '#fff' }}
         >
           <div style={{ fontWeight: 800, fontSize: 19, letterSpacing: '-.3px' }}>

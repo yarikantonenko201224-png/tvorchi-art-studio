@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import {
-  AGE_GROUPS, PRICES, DAY_SHORT, DAY_FULL, STUDIO, ALL_INCLUSIVE, TRIAL_PRICE,
+  AGE_GROUPS, PRICES, DAY_SHORT, DAY_FULL, STUDIO, ALL_INCLUSIVE, TRIAL_PRICE, GROUP_SIZE_MAX,
   lessonsByAge, ageGroup,
   type AgeId, type Lesson,
 } from '@/lib/data';
@@ -120,7 +120,7 @@ export default function BookingPage() {
                     {DAY_SHORT[l.day]} · {l.time} · {l.place}
                   </div>
                 </div>
-                <span className="badge">є місця</span>
+                <span className="badge">до {GROUP_SIZE_MAX} дітей</span>
               </div>
               <div className="card-foot">
                 <div className="t-small">

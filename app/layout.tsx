@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Rubik, Caveat } from 'next/font/google';
+import Header from '@/components/Header';
 import './globals.css';
 
 const rubik = Rubik({
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="uk" className={`${rubik.variable} ${caveat.variable}`}>
       <body>
+        <Header />
         <div className="shell">{children}</div>
       </body>
     </html>

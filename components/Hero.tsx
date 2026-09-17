@@ -49,7 +49,7 @@ export default function Hero() {
   const active = CLUSTERS.find((c) => c.id === openCluster) ?? null;
 
   return (
-    <section>
+    <section className="hero">
       <div className={`scene${ready ? ' is-ready' : ''}`} aria-hidden="true">
         {ITEMS.map((it, i) => (
           <span
@@ -79,6 +79,7 @@ export default function Hero() {
         </span>
       </div>
 
+      <div className="hero-text">
       <h1 className="t-display" style={{ marginTop: 4 }}>
         Знайдіть заняття для своєї дитини
       </h1>
@@ -127,6 +128,7 @@ export default function Hero() {
           </Link>
         </div>
       )}
+      </div>
     </section>
   );
 }

@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Logo from './Logo';
 import { STUDIO, TRIAL_PRICE } from '@/lib/data';
 import { getAnnouncements, upcoming, formatDate } from '@/lib/announcements';
+import { BrushIcon, CakeIcon, CalendarIcon, PaletteIcon } from './Icons';
 
 /* Точка входа по ссылке из Instagram bio.
    Задача экрана: за 3 секунды объяснить, куда человек попал,
@@ -40,11 +41,7 @@ export default async function Hub() {
 
         <div className="grid-2">
           <Link className="tile tile--primary" href="/zapys">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <rect x="28" y="6" width="8" height="26" rx="4" fill="#fff" />
-              <rect x="24" y="30" width="16" height="9" rx="2" fill="#FBD668" />
-              <path d="M24 39h16l-3 13-5 8-5-8z" fill="#fff" />
-            </svg>
+            <BrushIcon light />
             <span className="t">
               Записатися
               <br />
@@ -54,12 +51,7 @@ export default async function Hub() {
           </Link>
 
           <Link className="tile" href="/den-narodzhennya">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <rect x="12" y="30" width="40" height="24" rx="6" fill="#F73FA6" />
-              <rect x="12" y="30" width="40" height="8" fill="#4FD1D9" />
-              <rect x="30" y="12" width="4" height="16" rx="2" fill="#8A8078" />
-              <circle cx="32" cy="9" r="5" fill="#FBD668" />
-            </svg>
+            <CakeIcon />
             <span className="t">
               День
               <br />
@@ -69,13 +61,7 @@ export default async function Hub() {
           </Link>
 
           <Link className="tile" href="/rozklad">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <rect x="9" y="12" width="46" height="42" rx="7" fill="#45C8C8" />
-              <rect x="9" y="12" width="46" height="11" fill="#12706F" />
-              <rect x="17" y="30" width="12" height="5" rx="2.5" fill="#fff" />
-              <rect x="35" y="30" width="12" height="5" rx="2.5" fill="#fff" />
-              <rect x="17" y="41" width="12" height="5" rx="2.5" fill="#fff" />
-            </svg>
+            <CalendarIcon />
             <span className="t">
               Розклад
               <br />і ціни
@@ -84,11 +70,7 @@ export default async function Hub() {
           </Link>
 
           <Link className="tile" href="/maister-klasy">
-            <svg viewBox="0 0 64 64" aria-hidden="true">
-              <path d="M20 8h24l-4 26a8 8 0 0 1-16 0z" fill="#FBD668" />
-              <rect x="28" y="34" width="8" height="14" fill="#8A8078" />
-              <rect x="18" y="48" width="28" height="8" rx="4" fill="#F26F21" />
-            </svg>
+            <PaletteIcon />
             <span className="t">
               Майстер-
               <br />

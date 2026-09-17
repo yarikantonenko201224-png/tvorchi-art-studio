@@ -249,6 +249,22 @@ select.input{
   padding-right:44px
 }
 
+/* ---------- галерея работ ---------- */
+.gallery{
+  display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin-top:16px
+}
+.gallery-item{
+  position:relative; margin:0; aspect-ratio:1/1;
+  border-radius:var(--radius-card); overflow:hidden; background:var(--surface-soft)
+}
+/* Первая работа крупнее — сетка перестаёт читаться как плитка каталога */
+.gallery-item:first-child{ grid-column:span 2; aspect-ratio:3/2 }
+
+.mk-thumb{
+  position:relative; flex:none; width:56px; height:56px;
+  border-radius:14px; overflow:hidden; background:var(--surface-soft)
+}
+
 /* ---------- обложка события ---------- */
 .announce-cover{
   display:block; width:100%; height:180px; object-fit:cover;
@@ -302,4 +318,123 @@ select.input{
   *{animation-duration:.01ms !important;transition-duration:.01ms !important}
   .scene-obj{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot)) scale(1)}
   .scene-logo{opacity:1;transform:translate(-50%,-50%)}
+}
+
+/* ============================================================
+   ДЕСКТОП
+
+   Мобильный остаётся базовым — всё выше написано без медиазапросов.
+   Здесь только расширения для широких экранов: шапка вместо липкой
+   панели, колонки вместо стопки, крупнее сцена.
+   Брейкпоинт 900px: до него планшет ведёт себя как телефон,
+   и это нормально — раскладка в одну колонку там читается лучше.
+   ============================================================ */
+
+.site-header{display:none}
+
+@media(min-width:900px){
+  body{background:var(--surface-base)}
+
+  /* ---- шапка ---- */
+  .site-header{
+    display:block; position:sticky; top:0; z-index:30;
+    background:rgba(255,255,255,.92); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border-subtle)
+  }
+  .site-header-inner{
+    max-width:1120px; margin:0 auto; padding:12px 40px;
+    display:flex; align-items:center; gap:32px
+  }
+  .site-nav{display:flex; align-items:center; gap:4px; flex:1}
+  .site-nav a{
+    padding:10px 14px; border-radius:12px; text-decoration:none;
+    font-weight:600; font-size:15px; color:var(--ink-700);
+    transition:background .15s ease, color .15s ease
+  }
+  .site-nav a:hover{background:var(--surface-soft); color:var(--ink-900)}
+  .site-header-cta{display:flex; align-items:center; gap:16px}
+  .site-phone{
+    font-weight:700; font-size:15px; color:var(--ink-900);
+    text-decoration:none; white-space:nowrap
+  }
+
+  /* ---- контейнер ---- */
+  .shell{
+    max-width:1120px; box-shadow:none; min-height:0;
+    padding-bottom:64px
+  }
+  .page{padding:0 40px 64px}
+
+  /* Липкая нижняя панель на десктопе не нужна: её роль
+     играет кнопка в шапке, которая всегда на виду. */
+  .bar{display:none}
+
+  /* Кнопка «назад» внутри страниц — на десктопе есть меню */
+  .topbar{display:none}
+
+  /* ---- типографика крупнее ---- */
+  .t-display{font-size:clamp(40px,4.2vw,60px);letter-spacing:-2px}
+  .t-h1{font-size:40px;letter-spacing:-1.4px}
+  .t-h2{font-size:32px}
+  .t-lead{font-size:19px;max-width:62ch}
+
+  /* Текстовые страницы не растягиваем на всю ширину:
+     строка длиннее ~75 символов читается заметно хуже. */
+  .page > p, .page > .note, .faq{max-width:78ch}
+
+  /* ---- первый экран в две колонки ---- */
+  .hero{
+    display:grid; grid-template-columns:1fr 1fr; gap:56px;
+    align-items:center; padding:48px 0 24px
+  }
+  .hero-text{grid-column:1; grid-row:1}
+  .hero .scene{grid-column:2; grid-row:1; height:460px; margin-top:0}
+  .hero .grid-2{grid-template-columns:1fr 1fr}
+
+  /* Предметы и знак нарисованы под ширину телефона — на большом экране
+     они теряются. Масштабируем конечное состояние сборки, чтобы
+     сама анимация прилёта осталась нетронутой. */
+  .scene.is-ready .scene-obj{
+    transform:translate(-50%,-50%) rotate(var(--rot)) scale(1.6)
+  }
+  .scene.is-ready .scene-logo{
+    transform:translate(-50%,-50%) scale(1.45)
+  }
+
+  /* ---- сетки шире ---- */
+  .grid-2{grid-template-columns:repeat(4,1fr); gap:16px}
+  .gallery{grid-template-columns:repeat(4,1fr); gap:14px}
+  .gallery-item:first-child{grid-column:span 2; aspect-ratio:1/1}
+
+  /* Карточки списков ставим в две колонки, чтобы страница
+     не превращалась в ленту очень широких полос: строка в 1000px
+     нечитаема, а пустота справа выглядит как недоделка. */
+  .card{margin-top:16px}
+  .cards-grid{display:grid; grid-template-columns:1fr 1fr; gap:16px; align-items:start}
+  .cards-grid > .card{margin-top:0}
+
+  /* Расписание: дни рядом, а не лентой вниз — так видно всю неделю сразу,
+     ради чего на расписание и заходят. */
+  .schedule-days{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:16px; align-items:start
+  }
+  .schedule-days > .card{margin-top:0}
+
+  /* Прайс и переключатели не растягиваем: длинная строка с ценой
+     на краю экрана читается тяжело. */
+  .price-block{max-width:640px}
+  .audience-switch{max-width:640px}
+
+  .tile{min-height:150px}
+  .tile:hover{box-shadow:var(--shadow-soft); transform:translateY(-2px)}
+
+  .option-row{max-width:640px}
+  .stepper{margin-top:10px}
+  .input, select.input{max-width:440px}
+  .btn--wide{max-width:440px}
+}
+
+/* Очень широкие экраны: не даём контенту расползтись */
+@media(min-width:1400px){
+  .site-header-inner, .shell{max-width:1200px}
 }
