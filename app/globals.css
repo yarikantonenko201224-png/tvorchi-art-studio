@@ -1,0 +1,305 @@
+/* ============================================================
+   TVORCHI — база. Токены синхронизированы с design/tokens.css
+   ============================================================ */
+
+:root{
+  color-scheme: light;
+
+  --brand-orange:#F26F21; --brand-orange-hover:#DA6018; --brand-orange-active:#C0530F;
+  --accent-teal:#45C8C8; --accent-cyan:#4FD1D9; --accent-yellow:#FBD668; --accent-pink:#F73FA6;
+
+  --ink-900:#111111; --ink-700:#4A443F; --ink-500:#6B635C; --ink-400:#8A8078;
+  --surface-base:#FFFFFF; --surface-soft:#FBF7F3;
+  --border-default:#E7DFD7; --border-subtle:#F0EAE4;
+  --state-error:#C4261D; --state-success:#12706F; --state-warning:#8A4310;
+
+  --font-ui: var(--font-rubik), system-ui, -apple-system, sans-serif;
+  --font-logo: var(--font-caveat), cursive;
+
+  --radius-chip:16px; --radius-control:18px; --radius-card:22px; --radius-surface:24px;
+  --shadow-soft:0 4px 24px rgba(17,17,17,.06);
+  --shadow-lift:0 8px 30px rgba(17,17,17,.10);
+
+  --gutter:16px;
+  --bar-h:calc(52px + 24px + env(safe-area-inset-bottom));
+}
+
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html,body{margin:0;padding:0}
+
+body{
+  font-family:var(--font-ui);
+  font-size:16px; line-height:1.5; color:var(--ink-900);
+  background:#EFE9E3;
+  min-height:100dvh;
+  -webkit-font-smoothing:antialiased;
+}
+
+a{color:inherit}
+
+/* Оболочка: мобильный — главный, на широком экране прижимаем к центру */
+.shell{
+  max-width:430px; margin:0 auto; background:var(--surface-base);
+  min-height:100dvh; position:relative; overflow-x:hidden;
+}
+@media(min-width:520px){ .shell{box-shadow:var(--shadow-lift)} }
+
+.page{ padding:0 var(--gutter) var(--bar-h) }
+
+/* ---------- типографика ---------- */
+.t-display{font-weight:900;font-size:clamp(30px,8vw,38px);line-height:1.05;letter-spacing:-1.2px;margin:0}
+.t-h1{font-weight:800;font-size:30px;line-height:1.08;letter-spacing:-1px;margin:0}
+.t-h2{font-weight:800;font-size:26px;line-height:1.12;letter-spacing:-.7px;margin:0}
+.t-h3{font-weight:800;font-size:19px;line-height:1.2;letter-spacing:-.3px;margin:0}
+.t-lead{font-size:17px;line-height:1.45;color:var(--ink-700);margin:8px 0 0}
+.t-small{font-size:14px;line-height:1.4;color:var(--ink-500);margin:0}
+.t-label{font-weight:700;font-size:12px;letter-spacing:1.4px;text-transform:uppercase;color:var(--ink-400)}
+.t-price{font-weight:800;font-variant-numeric:tabular-nums}
+
+/* ---------- логотип ----------
+   Векторный, собирается в components/Logo.tsx: SVG-клякса + Caveat.
+   Размеры задаются пропом height, поэтому здесь только обёртка. */
+.logo{display:inline-flex;align-items:center;text-decoration:none}
+
+/* ---------- шапка ---------- */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 0 0}
+.icon-btn{
+  appearance:none;border:0;background:var(--surface-soft);color:var(--ink-700);
+  width:44px;height:44px;border-radius:14px;font-size:20px;cursor:pointer;
+  display:grid;place-items:center;text-decoration:none
+}
+.icon-btn:active{background:var(--border-subtle)}
+
+/* ---------- кнопки ---------- */
+.btn{
+  appearance:none;border:0;background:var(--brand-orange);color:#fff;
+  font-family:inherit;font-weight:800;font-size:16px;
+  min-height:52px;padding:0 24px;border-radius:var(--radius-control);cursor:pointer
+}
+.btn:active{background:var(--brand-orange-active)}
+.btn:disabled{background:#E4DCD4;color:#A79C92;cursor:not-allowed}
+.btn--wide{width:100%}
+.btn--small{min-height:44px;font-size:15px;font-weight:700;padding:0 20px}
+.btn--ghost{
+  background:#fff;color:var(--ink-700);border:1.5px solid var(--border-default)
+}
+.btn--ghost:active{background:var(--surface-soft)}
+
+/* ---------- карточки ---------- */
+.card{
+  border:1.5px solid var(--border-subtle);border-radius:var(--radius-card);
+  padding:16px;background:#fff;margin-top:12px
+}
+.card-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+.card-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+
+.badge{
+  font-weight:700;font-size:11.5px;letter-spacing:.3px;padding:6px 10px;border-radius:999px;
+  background:#E9F7F7;color:#0E5E5D;white-space:nowrap;flex:none
+}
+.badge--warn{background:#FFF1E4;color:#8A4310}
+
+.note{
+  margin-top:16px;padding:14px;border-radius:var(--radius-chip);
+  background:var(--surface-soft);font-size:13.5px;line-height:1.45;color:var(--ink-500)
+}
+
+/* ---------- поля ---------- */
+.field{margin-top:18px}
+.field label{display:block;margin-bottom:8px}
+.input{
+  width:100%;font-family:inherit;font-weight:500;font-size:16px;color:var(--ink-900);
+  padding:15px 16px;border:1.5px solid var(--border-default);
+  border-radius:var(--radius-control);background:#fff;min-height:52px
+}
+.input:focus{outline:0;border-color:var(--brand-orange);box-shadow:0 0 0 3px rgba(242,111,33,.14)}
+.input::placeholder{color:#B9AFA6}
+.input[aria-invalid="true"]{border-color:var(--state-error)}
+.error{margin-top:7px;font-weight:500;font-size:13px;color:var(--state-error)}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{
+  appearance:none;border:1.5px solid var(--border-default);background:#fff;
+  font-family:inherit;font-weight:700;font-size:15px;color:var(--ink-700);
+  min-width:46px;min-height:46px;padding:0 12px;border-radius:var(--radius-chip);cursor:pointer
+}
+.chip[aria-pressed="true"]{background:var(--brand-orange);border-color:var(--brand-orange);color:#fff}
+.chip--text{min-width:auto;padding:0 16px;font-weight:500}
+
+/* ---------- липкая нижняя панель ---------- */
+.bar{
+  position:fixed;left:0;right:0;bottom:0;z-index:20;
+  max-width:430px;margin:0 auto;
+  padding:12px var(--gutter) calc(12px + env(safe-area-inset-bottom));
+  background:rgba(255,255,255,.94);backdrop-filter:blur(10px);
+  border-top:1px solid var(--border-subtle);
+  display:flex;gap:12px;align-items:center
+}
+.bar-info{flex:1;min-width:0}
+.bar-info .k{font-size:12px;color:var(--ink-500)}
+.bar-info .v{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+
+/* ---------- анонс ---------- */
+.announce{
+  display:flex;gap:10px;align-items:center;margin-top:14px;padding:12px 14px;
+  border-radius:var(--radius-chip);background:#FFF3E9;border:1.5px solid #FBDCC4;
+  font-weight:500;font-size:14px;line-height:1.35;color:#8A4310;text-decoration:none
+}
+.announce b{font-weight:800}
+.announce .dot{width:8px;height:8px;border-radius:50%;background:var(--brand-orange);flex:none}
+
+/* ---------- сетки ---------- */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:18px}
+
+.tile{
+  appearance:none;border:1.5px solid var(--border-subtle);background:var(--surface-base);
+  border-radius:var(--radius-card);padding:16px 14px 15px;text-align:left;cursor:pointer;
+  display:flex;flex-direction:column;gap:10px;min-height:128px;
+  font-family:inherit;text-decoration:none;color:inherit;
+  transition:transform .12s ease, box-shadow .12s ease
+}
+.tile:active{transform:scale(.975);box-shadow:var(--shadow-soft)}
+.tile svg{width:38px;height:38px}
+.tile .t{font-weight:800;font-size:17px;line-height:1.15;letter-spacing:-.3px}
+.tile .d{font-size:13px;line-height:1.3;color:var(--ink-500);margin-top:-4px}
+.tile--primary{background:var(--brand-orange);border-color:var(--brand-orange);color:#fff}
+.tile--primary .d{color:rgba(255,255,255,.85)}
+
+/* ---------- сцена первого экрана ----------
+   Предметы прилетают из-за краёв и складываются вокруг кляксы.
+   Два слоя трансформаций: внешний span отвечает за сборку (transition),
+   внутренний — за дрейф (animation). Иначе они конфликтуют за transform. */
+.scene{
+  position:relative; height:272px; margin-top:8px;
+  overflow:hidden; /* предметы не должны раздувать страницу, пока летят */
+}
+.scene-obj{
+  position:absolute; display:block;
+  transform:translate(-50%,-50%) translate(var(--dx),var(--dy)) rotate(0deg) scale(.4);
+  opacity:0;
+  transition:transform .85s cubic-bezier(.2,.75,.25,1), opacity .45s ease
+}
+.scene.is-ready .scene-obj{
+  transform:translate(-50%,-50%) rotate(var(--rot)) scale(1);
+  opacity:1
+}
+.scene-obj-inner{display:block;width:100%;height:100%}
+.scene-obj-inner svg{width:100%;height:100%;display:block}
+
+.scene-logo{
+  position:absolute; left:50%; top:50%;
+  transform:translate(-50%,-50%) scale(.6); opacity:0;
+  transition:transform .7s cubic-bezier(.2,.75,.25,1) .25s, opacity .5s ease .25s
+}
+.scene.is-ready .scene-logo{transform:translate(-50%,-50%) scale(1);opacity:1}
+
+/* Дрейф — только на широких экранах: на телефоне он жжёт батарею
+   и ничего не добавляет к пониманию экрана. */
+@media(min-width:768px){
+  .scene.is-ready .scene-obj-inner{animation:floaty 7s ease-in-out infinite}
+}
+@keyframes floaty{
+  0%,100%{transform:translateY(0)}
+  50%{transform:translateY(-7px)}
+}
+
+/* ---------- счётчик и список опций ---------- */
+.stepper{
+  display:flex; align-items:center; gap:18px; margin-top:8px;
+  padding:8px 12px; border:1.5px solid var(--border-default);
+  border-radius:var(--radius-control); width:max-content
+}
+.stepper button{
+  appearance:none; border:0; background:var(--surface-soft); color:var(--ink-900);
+  width:44px; height:44px; border-radius:14px; font:700 22px/1 inherit; cursor:pointer
+}
+.stepper button:active{background:var(--border-subtle)}
+
+.option-row{
+  display:flex; align-items:center; justify-content:space-between; gap:12px;
+  width:100%; min-height:52px; padding:12px 16px; margin-bottom:8px;
+  border:1.5px solid var(--border-default); border-radius:var(--radius-control);
+  background:#fff; font:inherit; font-size:15px; text-align:left; cursor:pointer
+}
+.option-row[aria-pressed="true"]{
+  border-color:var(--brand-orange); background:#FFF6F0
+}
+
+.pick-mark{
+  position:relative; flex:none; width:22px; height:22px; border-radius:50%;
+  border:1.5px solid var(--border-default); background:#fff; transition:.15s
+}
+.option-row[aria-pressed="true"] .pick-mark{
+  border-color:var(--brand-orange); background:var(--brand-orange)
+}
+.option-row[aria-pressed="true"] .pick-mark::after{
+  content:''; position:absolute; left:6px; top:9px;
+  width:9px; height:5px; border-left:2px solid #fff; border-bottom:2px solid #fff;
+  transform:rotate(-45deg)
+}
+
+select.input{
+  appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-500) 50%),
+                   linear-gradient(135deg,var(--ink-500) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 24px, calc(100% - 14px) 24px;
+  background-size:6px 6px, 6px 6px;
+  background-repeat:no-repeat;
+  padding-right:44px
+}
+
+/* ---------- обложка события ---------- */
+.announce-cover{
+  display:block; width:100%; height:180px; object-fit:cover;
+  background:var(--surface-soft)
+}
+
+/* ---------- FAQ ----------
+   Нативные details/summary: работают без JS, доступны с клавиатуры
+   и раскрываются поиском по странице (Ctrl+F находит текст в закрытых). */
+.faq{
+  border-bottom:1px solid var(--border-subtle);
+  padding:4px 0
+}
+.faq summary{
+  display:flex; align-items:flex-start; justify-content:space-between; gap:14px;
+  padding:16px 0; cursor:pointer; list-style:none;
+  font-weight:700; font-size:16px; line-height:1.35; color:var(--ink-900);
+  min-height:44px
+}
+.faq summary::-webkit-details-marker{display:none}
+.faq-sign{
+  position:relative; flex:none; width:20px; height:20px; margin-top:2px
+}
+.faq-sign::before,.faq-sign::after{
+  content:''; position:absolute; left:50%; top:50%;
+  background:var(--brand-orange); border-radius:2px;
+  transform:translate(-50%,-50%); transition:transform .2s ease
+}
+.faq-sign::before{width:14px;height:2.5px}
+.faq-sign::after{width:2.5px;height:14px}
+.faq[open] .faq-sign::after{transform:translate(-50%,-50%) scaleY(0)}
+.faq p{
+  margin:0 0 18px; padding-right:34px;
+  font-size:15px; line-height:1.55; color:var(--ink-700)
+}
+
+/* ---------- кластеры ---------- */
+.cluster{position:relative;gap:6px}
+.cluster-dot{
+  position:absolute; right:14px; top:14px;
+  width:10px; height:10px; border-radius:50%
+}
+.cluster-panel{
+  margin-top:12px; padding:18px;
+  border:1.5px solid var(--border-default); border-radius:var(--radius-card);
+  background:#fff; animation:panelIn .25s ease both
+}
+@keyframes panelIn{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important}
+  .scene-obj{opacity:1;transform:translate(-50%,-50%) rotate(var(--rot)) scale(1)}
+  .scene-logo{opacity:1;transform:translate(-50%,-50%)}
+}
