@@ -1,6 +1,34 @@
 import { STUDIO } from '@/lib/data';
 import { formatDate, type Announcement } from '@/lib/announcements';
 
+const MONTHS_SHORT = [
+  'січ', 'лют', 'бер', 'кві', 'тра', 'чер',
+  'лип', 'сер', 'вер', 'жов', 'лис', 'гру',
+];
+
+/* Пока у события нет фото — рисуем фирменную обложку с датой.
+   Пустая карточка выглядит недоделанной, а дата — это ровно то,
+   что человек ищет в анонсе первым. Как только в таблице появится
+   ссылка на афишу, обложка заменится на неё. */
+function DateCover({ startsAt }: { startsAt: string }) {
+  const d = new Date(startsAt.replace(' ', 'T'));
+  const valid = !Number.isNaN(d.getTime());
+
+  return (
+    <div className="announce-cover announce-cover--date" aria-hidden="true">
+      <span className="dot dot--teal" />
+      <span className="dot dot--yellow" />
+      <span className="dot dot--pink" />
+      {valid && (
+        <div className="announce-date">
+          <span className="announce-day">{d.getDate()}</span>
+          <span className="announce-month">{MONTHS_SHORT[d.getMonth()]}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 /* Карточка события. Полное описание раскрывается на месте —
    отдельная страница под каждое событие пока избыточна: их единицы,
    а лишний переход удлиняет путь до записи. */
@@ -9,9 +37,11 @@ export default function AnnounceCard({ item }: { item: Announcement }) {
 
   return (
     <article className="card" style={{ padding: 0, overflow: 'hidden' }}>
-      {item.cover && (
+      {item.cover ? (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img src={item.cover} alt="" className="announce-cover" />
+      ) : (
+        <DateCover startsAt={item.startsAt} />
       )}
 
       <div style={{ padding: 18 }}>

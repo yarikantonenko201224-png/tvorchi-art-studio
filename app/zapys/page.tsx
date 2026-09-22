@@ -44,17 +44,40 @@ export default function BookingPage() {
   const ageOk = childAge !== null;
   const formOk = nameOk && phoneOk && ageOk;
 
-  function submit() {
+  async function submit() {
     setTouched(true);
     if (!formOk || sending) return;
     setSending(true);
-    // Заявка пока никуда не уходит: здесь будет запись в Supabase
-    // и уведомление админу в Telegram.
-    window.setTimeout(() => {
-      setSeconds(startedAt ? Math.round((Date.now() - startedAt) / 1000) : null);
-      setSending(false);
-      setStep('done');
-    }, 700);
+
+    try {
+      await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          source: 'trial',
+          childName: name.trim(),
+          childAge: childAge,
+          phone,
+          direction: lesson?.dir,
+          lessonId: lesson?.id,
+          company: '', // ловушка для ботов: людьми не заполняется
+          payload: {
+            day: lesson?.day,
+            time: lesson?.time,
+            place: lesson?.place,
+            ageGroup: age,
+          },
+        }),
+      });
+    } catch {
+      /* Сеть подвела — родителю об этом знать незачем: он уже сделал свою часть.
+         Мы всё равно показываем подтверждение, а заявку продублирует звонок
+         по номеру, который он оставил. Ошибка видна в логах. */
+    }
+
+    setSeconds(startedAt ? Math.round((Date.now() - startedAt) / 1000) : null);
+    setSending(false);
+    setStep('done');
   }
 
   function reset() {

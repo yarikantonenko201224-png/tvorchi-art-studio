@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { masterClassesFor, PRICES, STUDIO, TRIAL_PRICE } from '@/lib/data';
-import { formatPhone, isPhoneComplete, isEmail, peopleWord } from '@/lib/format';
+import { formatPhone, isPhoneComplete, isEmail, peopleWord, childrenWord } from '@/lib/format';
 
 /* Подарочный сертификат.
 
@@ -233,10 +233,16 @@ export default function CertificatesPage() {
                 <span className="t-price" style={{ fontSize: 22 }}>{people}</span>
                 <button type="button" onClick={() => setPeople((n) => Math.min(20, n + 1))} aria-label="Більше">+</button>
               </div>
+              {/* Подсказка зависит от того, кому сертификат: девичник
+                  в детском сценарии звучит абсурдно. */}
               <p className="t-small" style={{ marginTop: 10 }}>
                 {people === 1
-                  ? 'Сертифікат на одну людину'
-                  : `Компанія з ${people} ${peopleWord(people)} — зручно для дівич-вечора, зустрічі подруг або корпоративу`}
+                  ? (recipient === 'kids'
+                      ? 'Сертифікат на одну дитину'
+                      : 'Сертифікат на одну людину')
+                  : (recipient === 'kids'
+                      ? `Сертифікат на ${people} ${childrenWord(people)} — наприклад, для друзів або братів і сестер`
+                      : `Компанія з ${people} ${peopleWord(people)} — зручно для дівич-вечора, зустрічі подруг або корпоративу`)}
               </p>
             </div>
           </>

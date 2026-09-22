@@ -27,7 +27,7 @@ export default async function AnnouncementsPage() {
         </p>
 
         {events.length ? (
-          <div style={{ marginTop: 8 }}>
+          <div className="cards-grid" style={{ marginTop: 16 }}>
             {events.map((item) => (
               <AnnounceCard key={item.id} item={item} />
             ))}
