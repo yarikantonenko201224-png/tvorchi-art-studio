@@ -72,10 +72,13 @@ a{color:inherit}
 .icon-btn:active{background:var(--border-subtle)}
 
 /* ---------- кнопки ---------- */
+/* Многие кнопки — это ссылки (next/link), поэтому снимаем подчёркивание
+   и запрещаем перенос: «Пробне за 150 ₴» не должно ломаться на две строки. */
 .btn{
   appearance:none;border:0;background:var(--brand-orange);color:#fff;
   font-family:inherit;font-weight:800;font-size:16px;
-  min-height:52px;padding:0 24px;border-radius:var(--radius-control);cursor:pointer
+  min-height:52px;padding:0 24px;border-radius:var(--radius-control);cursor:pointer;
+  text-decoration:none;white-space:nowrap
 }
 .btn:active{background:var(--brand-orange-active)}
 .btn:disabled{background:#E4DCD4;color:#A79C92;cursor:not-allowed}
@@ -381,7 +384,8 @@ select.input{
     transition:background .15s ease, color .15s ease
   }
   .site-nav a:hover{background:var(--surface-soft); color:var(--ink-900)}
-  .site-header-cta{display:flex; align-items:center; gap:16px}
+  .site-header-cta{display:flex; align-items:center; gap:16px; flex:none}
+  .site-header-cta .btn{min-height:44px; font-size:15px; padding:0 18px}
   .site-phone{
     font-weight:700; font-size:15px; color:var(--ink-900);
     text-decoration:none; white-space:nowrap
@@ -394,9 +398,18 @@ select.input{
   }
   .page{padding:0 40px 64px}
 
-  /* Липкая нижняя панель на десктопе не нужна: её роль
-     играет кнопка в шапке, которая всегда на виду. */
-  .bar{display:none}
+  /* Липкую панель на десктопе НЕ прячем.
+
+     Сначала она была скрыта — мол, её роль играет кнопка в шапке.
+     Это сломало формы: кнопка отправки живёт внутри панели, и заявку
+     с компьютера стало невозможно отправить. Поэтому на широком экране
+     панель просто перестаёт быть липкой и становится обычным блоком
+     в конце страницы. */
+  .bar{
+    position:static; margin:8px 0 0; padding:0 40px;
+    background:none; backdrop-filter:none; border-top:0;
+    max-width:520px
+  }
 
   /* Кнопка «назад» внутри страниц — на десктопе есть меню */
   .topbar{display:none}
