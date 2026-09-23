@@ -19,7 +19,11 @@ export default function Gallery({ limit = 6 }: { limit?: number }) {
               src={p.src}
               alt={p.alt}
               fill
-              sizes="(max-width: 430px) 50vw, 200px"
+              /* Первая работа занимает две колонки, поэтому фиксированная
+                 ширина здесь врала бы: Next отдал бы узкую картинку на
+                 широкое место и она размылась. Проценты ширины экрана
+                 безопаснее — чуть больше трафика, зато всегда резко. */
+              sizes="(max-width: 900px) 60vw, 33vw"
               style={{ objectFit: 'cover' }}
             />
           </figure>

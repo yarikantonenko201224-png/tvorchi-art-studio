@@ -31,7 +31,15 @@ export default function MasterClassesPage() {
   const [wish, setWish] = useState('');
   const [touched, setTouched] = useState(false);
 
-  const list = masterClassesFor(audience);
+  /* Сначала те, у которых есть фото. Вперемешку с цветными заглушками
+     они читаются как «картинка не загрузилась»; сверху фото — снизу
+     ровный блок заглушек, и это выглядит как осознанное деление
+     на популярные и остальные. */
+  const list = [...masterClassesFor(audience)].sort((a, b) => {
+    const pa = masterClassPhoto(a.slug) ? 0 : 1;
+    const pb = masterClassPhoto(b.slug) ? 0 : 1;
+    return pa - pb;
+  });
   const price = chosen ? chosen[audience]! : null;
   const total = price ? price.price * people : null;
   const approximate = Boolean(price?.from);
@@ -227,30 +235,64 @@ export default function MasterClassesPage() {
           </div>
         )}
 
-        <div style={{ marginTop: 16 }}>
-          {list.map((m) => {
+        <div className="mk-grid">
+          {list.map((m, i) => {
             const p = m[audience]!;
             const photo = masterClassPhoto(m.slug);
+            const selected = chosen?.slug === m.slug;
+            const sum = p.price * (selected ? people : 1);
+
             return (
-              <button
+              <article
                 key={m.slug}
-                type="button"
-                className="option-row"
-                aria-pressed={chosen?.slug === m.slug}
-                onClick={() => { setChosen(m); setPeople(1); }}
-                style={{ gap: 14, minHeight: photo ? 80 : 52 }}
+                className={`mk-card${selected ? ' is-selected' : ''}`}
+                data-tint={i % 4}
               >
-                {photo && (
-                  <span className="mk-thumb">
-                    <Image src={photo} alt="" fill sizes="56px" style={{ objectFit: 'cover' }} />
+                <button
+                  type="button"
+                  className="mk-card-main"
+                  aria-pressed={selected}
+                  onClick={() => { setChosen(selected ? null : m); setPeople(1); }}
+                >
+                  <span className="mk-cover">
+                    {photo ? (
+                      <Image src={photo} alt="" fill sizes="(max-width:900px) 45vw, 260px" style={{ objectFit: 'cover' }} />
+                    ) : (
+                      <span className="mk-cover-mark" aria-hidden="true" />
+                    )}
                   </span>
+
+                  <span className="mk-title">{m.title}</span>
+                  <span className="mk-price">
+                    {p.from && <span className="mk-from">від </span>}
+                    {p.price} ₴
+                    <span className="mk-per"> / особа</span>
+                  </span>
+                </button>
+
+                {/* Счётчик раскрывается прямо в карточке: прятать его
+                    за следующим шагом значило, что о нём никто не узнает. */}
+                {selected && (
+                  <div className="mk-pick">
+                    <div className="stepper">
+                      <button type="button" onClick={() => setPeople((n) => Math.max(1, n - 1))} aria-label="Менше">−</button>
+                      <span className="t-price" style={{ fontSize: 20 }}>{people}</span>
+                      <button type="button" onClick={() => setPeople((n) => Math.min(20, n + 1))} aria-label="Більше">+</button>
+                    </div>
+
+                    <div className="mk-sum">
+                      <span className="t-small">{people} {peopleWord(people)}</span>
+                      <span className="t-price" style={{ fontSize: 20 }}>
+                        {p.from ? 'від ' : ''}{sum.toLocaleString('uk-UA')} ₴
+                      </span>
+                    </div>
+
+                    <button className="btn btn--small btn--wide" onClick={() => setStep('form')}>
+                      Записатися
+                    </button>
+                  </div>
                 )}
-                <span style={{ fontWeight: 600, flex: 1, textAlign: 'left' }}>{m.title}</span>
-                <span className="t-price" style={{ whiteSpace: 'nowrap' }}>
-                  {p.from && <span style={{ fontWeight: 400, color: 'var(--ink-500)', fontSize: 13 }}>від </span>}
-                  {p.price} ₴
-                </span>
-              </button>
+              </article>
             );
           })}
         </div>
@@ -272,15 +314,20 @@ export default function MasterClassesPage() {
         </div>
       </div>
 
-      <div className="bar">
-        <div className="bar-info">
-          <div className="k">{chosen ? chosen.title : `${list.length} ${masterClassesWord(list.length)}`}</div>
-          <div className="v">{chosen ? totalLabel : 'Оберіть майстер-клас'}</div>
+      {/* Нижняя панель нужна, только пока ничего не выбрано: после выбора
+          кнопка записи появляется прямо в карточке, у суммы. */}
+      {!chosen && (
+        <div className="bar">
+          <div className="bar-info">
+            <div className="k">{list.length} {masterClassesWord(list.length)}</div>
+            <div className="v">Оберіть майстер-клас</div>
+          </div>
+          <a className="btn btn--ghost btn--small" href={STUDIO.viber}
+             style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
+            Запитати
+          </a>
         </div>
-        <button className="btn" disabled={!chosen} onClick={() => setStep('form')}>
-          Далі
-        </button>
-      </div>
+      )}
     </>
   );
 }

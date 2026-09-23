@@ -51,8 +51,11 @@ export default async function HomePage() {
           </>
         )}
 
-        {/* Возрастные группы — ядро новой системы студии */}
-        <h2 className="t-h2" style={{ marginTop: 36 }}>Чотири вікові групи</h2>
+        {/* Возрастные группы — ядро новой системы студии.
+            Вынесены на мягкую подложку, чтобы страница не читалась
+            как один сплошной столбец карточек. */}
+        <section className="band">
+        <h2 className="t-h2">Чотири вікові групи</h2>
         <p className="t-lead">
           У кожної — свій набір напрямів і своя тривалість заняття.
           Групи невеликі, до {GROUP_SIZE_MAX} дітей: педагог встигає до кожного.
@@ -82,6 +85,7 @@ export default async function HomePage() {
           );
         })}
         </div>
+        </section>
 
         {/* All Inclusive */}
         <div className="card" style={{ background: 'var(--brand-orange)', border: 0, color: '#fff', marginTop: 20 }}>
