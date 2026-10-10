@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import PageHero from '@/components/PageHero';
+import Capy from '@/components/Capy';
 import { FAQ, STUDIO } from '@/lib/data';
 
 export const metadata = {
@@ -23,57 +25,43 @@ function faqJsonLd() {
 
 export default function FaqPage() {
   return (
-    <>
+    <div className="inner">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd()) }}
       />
 
-      <div className="page">
-        <div className="topbar">
-          <Link className="icon-btn" href="/i" aria-label="Назад">←</Link>
-        </div>
+      <PageHero
+        tone="mint"
+        crumb="Питання"
+        kicker="запитуйте сміливо"
+        title={<>Питання <em>та відповіді</em></>}
+        lead="Зібрали те, що батьки питають найчастіше. Якщо чогось не знайшли, телефонуйте або пишіть, відповімо швидко."
+        art={<Capy size={210} mood="wink" />}
+      />
 
-        <h1 className="t-h1" style={{ marginTop: 18 }}>Питання та відповіді</h1>
-        <p className="t-lead">
-          Якщо чогось не знайшли — телефонуйте або пишіть, відповімо швидко.
-        </p>
-
-        <div style={{ marginTop: 22 }}>
-          {FAQ.map((item) => (
-            <details key={item.q} className="faq">
-              <summary>
-                <span>{item.q}</span>
-                <span className="faq-sign" aria-hidden="true" />
-              </summary>
-              <p>{item.a}</p>
-            </details>
-          ))}
-        </div>
-
-        <div className="note" style={{ marginTop: 24 }}>
-          Не знайшли відповіді? Напишіть або зателефонуйте нам — із радістю допоможемо.
-          <br />
-          <a href={STUDIO.phoneHref} style={{ color: 'var(--brand-orange)', fontWeight: 700 }}>
-            {STUDIO.phone}
-          </a>{' '}
-          ·{' '}
-          <a href={STUDIO.instagram} target="_blank" rel="noopener"
-             style={{ color: 'var(--brand-orange)', fontWeight: 700 }}>
-            Direct в Instagram
-          </a>
+      <div className="sheet">
+        <div className="faq-layout">
+          <div className="faq2">
+            {FAQ.map((item, i) => (
+              <details key={item.q} className="faq" open={i === 0}>
+                <summary>
+                  <span>{item.q}</span>
+                  <span className="faq-sign" aria-hidden="true" />
+                </summary>
+                <p>{item.a}</p>
+              </details>
+            ))}
+          </div>
+          <aside className="faq-help">
+            <h2 className="t-h3">Не знайшли відповіді?</h2>
+            <p>Напишіть або зателефонуйте нам, із радістю допоможемо.</p>
+            <a className="btn" href={STUDIO.phoneHref}>{STUDIO.phone}</a>
+            <a className="btn btn--ghost" href={STUDIO.instagram} target="_blank" rel="noopener">Direct в Instagram</a>
+            <Link className="faq-help-link" href="/zapys">або одразу записатися на пробне →</Link>
+          </aside>
         </div>
       </div>
-
-      <div className="bar">
-        <a className="btn btn--ghost btn--small" href={STUDIO.phoneHref}
-           style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
-          Подзвонити
-        </a>
-        <Link className="btn" href="/zapys" style={{ display: 'grid', placeItems: 'center', flex: 1 }}>
-          Записатися
-        </Link>
-      </div>
-    </>
+    </div>
   );
 }

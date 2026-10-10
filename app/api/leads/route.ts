@@ -7,7 +7,7 @@ import { createLead, type LeadInput, type LeadSource } from '@/lib/leads';
    Капчу сознательно не ставим — она сильнее бьёт по конверсии,
    чем спам по студии в Кременчуці. */
 
-const SOURCES: LeadSource[] = ['trial', 'masterclass', 'birthday', 'certificate', 'quiz'];
+const SOURCES: LeadSource[] = ['trial', 'masterclass', 'birthday', 'certificate', 'quiz', 'camp', 'party', 'trip'];
 
 /* Примитивный лимит в памяти процесса. Для одной студии этого достаточно;
    при росте нагрузки переедет в Supabase или Upstash. */

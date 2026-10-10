@@ -1,12 +1,8 @@
-import Hub from '@/components/Hub';
+import { permanentRedirect } from 'next/navigation';
 
-export const metadata = {
-  title: 'TVORCHI ART STUDIO — заняття, свята, майстер-класи',
-  description: 'Оберіть, що вас цікавить: запис на заняття, день народження, розклад або майстер-клас.',
-};
-
-/* /i — короткая ссылка для bio в Instagram.
-   Под конкретные посты потом добавятся /i/dr, /i/mk, /i/rozklad. */
-export default function InstagramHubPage() {
-  return <Hub />;
+/* /i — короткая ссылка из bio в Instagram. Раньше здесь была отдельная
+   мини-страница; новая главная сама удобна с телефона, поэтому ведём туда.
+   Ссылка в bio продолжает работать. */
+export default function InstagramEntry() {
+  permanentRedirect('/');
 }

@@ -3,6 +3,8 @@
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import PageHero, { Steps } from '@/components/PageHero';
+import Capy from '@/components/Capy';
 import {
   AGE_GROUPS, PRICES, DAY_SHORT, TRIAL_PRICE,
   LIKE_LABELS, DEVELOP_LABELS, LIKE_PHRASES, DEVELOP_PHRASES,
@@ -63,8 +65,8 @@ export default function Quiz() {
   /* ---------------- ШАГ 1: возраст ---------------- */
   if (step === 0) {
     return (
-      <Shell progress={progress} onBack={null} step="1 / 3">
-        <h1 className="t-h1" style={{ marginTop: 20 }}>Скільки років дитині?</h1>
+      <Shell idx={0} progress={progress} onBack={null} step="1 / 3">
+        <h2 className="t-h2 flow-q">Скільки років дитині?</h2>
         <p className="t-lead">Від віку залежить, які напрями взагалі доступні.</p>
 
         <div className="grid-2">
@@ -93,8 +95,8 @@ export default function Quiz() {
   /* ---------------- ШАГ 2: что нравится ---------------- */
   if (step === 1) {
     return (
-      <Shell progress={progress} onBack={() => setStep(0)} step="2 / 3">
-        <h1 className="t-h1" style={{ marginTop: 20 }}>Що подобається дитині?</h1>
+      <Shell idx={1} progress={progress} onBack={() => setStep(0)} step="2 / 3">
+        <h2 className="t-h2 flow-q">Що подобається дитині?</h2>
         <p className="t-lead">Можна обрати кілька — або жодного, якщо ще не знаєте.</p>
 
         <div style={{ marginTop: 18 }}>
@@ -122,8 +124,8 @@ export default function Quiz() {
   /* ---------------- ШАГ 3: что развивать ---------------- */
   if (step === 2) {
     return (
-      <Shell progress={progress} onBack={() => setStep(1)} step="3 / 3">
-        <h1 className="t-h1" style={{ marginTop: 20 }}>Що хочете розвивати?</h1>
+      <Shell idx={2} progress={progress} onBack={() => setStep(1)} step="3 / 3">
+        <h2 className="t-h2 flow-q">Що хочете розвивати?</h2>
         <p className="t-lead">Оберіть до двох — так підбір буде точнішим.</p>
 
         <div style={{ marginTop: 18 }}>
@@ -159,10 +161,10 @@ export default function Quiz() {
   const fewOptions = all.length <= 2;
 
   return (
-    <Shell progress={100} onBack={() => setStep(2)} step="Готово">
-      <h1 className="t-h1" style={{ marginTop: 20 }}>
+    <Shell idx={3} progress={100} onBack={() => setStep(2)} step="Готово">
+      <h2 className="t-h2 flow-q">
         {scored.length ? 'Ось що ми рекомендуємо' : `Що є для ${group.title} років`}
-      </h1>
+      </h2>
       <p className="t-lead">
         {scored.length
           ? `Для дитини ${group.title} років, з урахуванням ваших відповідей.`
@@ -242,35 +244,32 @@ export default function Quiz() {
 
 /* ---------------- обёртка со степпером и липкой кнопкой ---------------- */
 function Shell({
-  children, progress, onBack, step,
+  children, onBack, idx,
 }: {
   children: React.ReactNode;
   progress: number;
   onBack: (() => void) | null;
   step: string;
+  idx: number;
 }) {
   return (
-    <>
-      <div className="page">
-        <div className="topbar">
-          {onBack ? (
-            <button className="icon-btn" onClick={onBack} aria-label="Назад">←</button>
-          ) : (
-            <Link className="icon-btn" href="/i" aria-label="Назад">←</Link>
-          )}
-          <span className="t-small">{step}</span>
+    <div className="inner">
+      <PageHero
+        tone="mint"
+        crumb="Підбір заняття"
+        kicker="3 питання · 30 секунд"
+        title={<>Підберемо <em>напрям</em></>}
+        lead="Відповідайте про дитину, а ми покажемо заняття, які їй підійдуть, з розкладом і цінами."
+        art={<Capy size={200} />}
+      />
+      <div className="sheet">
+        <div className="sheet-in">
+          <div className="flow-top">
+            {onBack && <button className="icon-btn" onClick={onBack} aria-label="Назад">←</button>}
+            <Steps items={['Вік', 'Що подобається', 'Що розвивати', 'Результат']} current={idx} />
+          </div>
+          <div className="page flow-body" key={idx}>{children}</div>
         </div>
-
-        <div style={{ height: 3, background: 'var(--border-subtle)', borderRadius: 2, marginTop: 14 }}>
-          <div
-            style={{
-              width: `${progress}%`, height: '100%', borderRadius: 2,
-              background: 'var(--brand-orange)', transition: 'width .3s ease',
-            }}
-          />
-        </div>
-
-        {children}
       </div>
 
       <div className="bar">
@@ -282,6 +281,6 @@ function Shell({
           Записатися
         </Link>
       </div>
-    </>
+    </div>
   );
 }

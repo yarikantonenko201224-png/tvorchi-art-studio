@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import { STUDIO } from '@/lib/data';
 import { formatDate, type Announcement } from '@/lib/announcements';
 
@@ -81,7 +82,15 @@ export default function AnnounceCard({ item }: { item: Announcement }) {
           </details>
         )}
 
-        {!soldOut && (
+        {!soldOut && (item.link?.startsWith('/') ? (
+          <Link
+            className="btn btn--small btn--wide"
+            href={item.link}
+            style={{ display: 'grid', placeItems: 'center', marginTop: 14, textDecoration: 'none' }}
+          >
+            Програма і запис
+          </Link>
+        ) : (
           <a
             className="btn btn--small btn--wide"
             href={item.link || STUDIO.viber}
@@ -89,7 +98,7 @@ export default function AnnounceCard({ item }: { item: Announcement }) {
           >
             Зареєструватися
           </a>
-        )}
+        ))}
       </div>
     </article>
   );

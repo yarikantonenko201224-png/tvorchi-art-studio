@@ -1,7 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import PageHero, { Steps } from '@/components/PageHero';
+import Capy from '@/components/Capy';
 import {
   AGE_GROUPS, PRICES, DAY_SHORT, DAY_FULL, STUDIO, ALL_INCLUSIVE, TRIAL_PRICE, GROUP_SIZE_MAX,
   lessonsByAge, ageGroup,
@@ -26,6 +28,13 @@ export default function BookingPage() {
   function begin() {
     if (startedAt === null) setStartedAt(Date.now());
   }
+
+  /* С главной можно прийти сразу с возрастом: /zapys?age=5-6 — тогда шаг выбора возраста пропускаем. */
+  useEffect(() => {
+    const fromUrl = new URLSearchParams(window.location.search).get('age');
+    if (fromUrl && AGE_GROUPS.some((g) => g.id === fromUrl)) pickAge(fromUrl as AgeId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   function pickAge(id: AgeId) {
     begin();
@@ -66,6 +75,7 @@ export default function BookingPage() {
             time: lesson?.time,
             place: lesson?.place,
             ageGroup: age,
+            secondsToLead: startedAt ? Math.round((Date.now() - startedAt) / 1000) : undefined,
           },
         }),
       });
@@ -89,12 +99,8 @@ export default function BookingPage() {
   /* ---------------- ВОЗРАСТ ---------------- */
   if (step === 'age') {
     return (
-      <div className="page">
-        <div className="topbar">
-          <Link className="icon-btn" href="/i" aria-label="Назад">←</Link>
-        </div>
-
-        <h1 className="t-h1" style={{ marginTop: 18 }}>Скільки років дитині?</h1>
+      <Frame idx={0}>
+        <h2 className="t-h2 flow-q">Скільки років дитині?</h2>
         <p className="t-lead">Від віку залежать напрями та розклад.</p>
 
         <div className="grid-2">
@@ -112,7 +118,7 @@ export default function BookingPage() {
           <b style={{ color: 'var(--ink-900)' }}>{ALL_INCLUSIVE.title} — {ALL_INCLUSIVE.price} ₴/міс:</b>{' '}
           {ALL_INCLUSIVE.description}. Новим клієнтам зараз −50%.
         </div>
-      </div>
+      </Frame>
     );
   }
 
@@ -122,12 +128,8 @@ export default function BookingPage() {
     const list = lessonsByAge(age);
 
     return (
-      <div className="page">
-        <div className="topbar">
-          <button className="icon-btn" onClick={() => setStep('age')} aria-label="Назад">←</button>
-        </div>
-
-        <h1 className="t-h1" style={{ marginTop: 18 }}>Заняття для {group.title} років</h1>
+      <Frame idx={1} onBack={() => setStep('age')}>
+        <h2 className="t-h2 flow-q">Заняття для {group.title} років</h2>
         <p className="t-lead">
           {list.length} {lessonsWord(list.length)} на тиждень · тривалість {list[0]?.dur ?? 60} хвилин
         </p>
@@ -160,7 +162,7 @@ export default function BookingPage() {
           Є також групи на <b>Молодіжному</b> — англійська, малювання, робототехніка,
           підготовка до школи. Вік груп уточнюємо.
         </div>
-      </div>
+      </Frame>
     );
   }
 
@@ -169,13 +171,8 @@ export default function BookingPage() {
     const group = ageGroup(age);
 
     return (
-      <>
-        <div className="page">
-          <div className="topbar">
-            <button className="icon-btn" onClick={() => setStep('catalog')} aria-label="Назад">←</button>
-          </div>
-
-          <h1 className="t-h1" style={{ marginTop: 18 }}>Пробне заняття</h1>
+      <Frame idx={2} onBack={() => setStep('catalog')}>
+          <h2 className="t-h2 flow-q">Пробне заняття</h2>
           <p className="t-lead">
             {TRIAL_PRICE} ₴ · передзвонимо протягом години. Реєстрація не потрібна.
           </p>
@@ -277,36 +274,35 @@ export default function BookingPage() {
           </div>
 
           <p style={{ margin: '22px 0 0', fontSize: 12.5, lineHeight: 1.45, color: 'var(--ink-400)', textAlign: 'center' }}>
-            Натискаючи «Записатися», ви погоджуєтесь на обробку контактних даних для запису на заняття.
+            Натискаючи «Записатися», ви погоджуєтесь на обробку контактних даних згідно з <Link href="/polityka-konfidentsiinosti" style={{ color: 'inherit', textDecoration: 'underline' }}>політикою конфіденційності</Link>.
           </p>
-        </div>
 
         <div className="bar">
           <button className="btn btn--wide" onClick={submit} disabled={sending || (touched && !formOk)}>
             {sending ? 'Відправляємо…' : 'Записатися'}
           </button>
         </div>
-      </>
+      </Frame>
     );
   }
 
   /* ---------------- ГОТОВО ---------------- */
   if (step === 'done' && lesson) {
     return (
-      <>
-        <div className="page">
+      <Frame idx={3}>
           <svg width="76" height="76" viewBox="0 0 76 76" style={{ display: 'block', margin: '28px auto 0' }} aria-hidden="true">
             <circle cx="38" cy="38" r="36" fill="#E9F7F7" />
             <path d="M23 39.5 33.5 50 54 27" fill="none" stroke="#12706F" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
 
           <h1 className="t-h2" style={{ textAlign: 'center', marginTop: 16 }}>
-            {name.trim()} записана на пробне
+            Пробне заброньовано
           </h1>
           <p className="t-lead" style={{ textAlign: 'center' }}>Передзвонимо протягом години.</p>
 
           <div className="card" style={{ background: 'var(--surface-soft)', border: 0, marginTop: 20 }}>
             {[
+              ['Дитина', name.trim()],
               ['Заняття', lesson.dir],
               ['Коли', `${DAY_FULL[lesson.day]}, ${lesson.time}`],
               ['Локація', lesson.place],
@@ -319,30 +315,37 @@ export default function BookingPage() {
             ))}
           </div>
 
-          {seconds !== null && (
-            <div
-              style={{
-                marginTop: 20, padding: '13px 16px', borderRadius: 'var(--radius-chip)',
-                border: '1.5px dashed var(--border-default)', fontSize: 13, lineHeight: 1.4, color: 'var(--ink-500)',
-              }}
-            >
-              Шлях від входу до заявки:{' '}
-              <b style={{ color: 'var(--brand-orange)', fontVariantNumeric: 'tabular-nums' }}>{seconds} с</b>.{' '}
-              {seconds <= 60 ? 'Укладається в ціль 60 секунд.' : 'Довше за ціль — є що скорочувати.'}
-            </div>
-          )}
-
-          <p style={{ margin: '22px 0 0', fontSize: 12.5, color: 'var(--ink-400)', textAlign: 'center' }}>
-            Прототип: заявка ще не відправляється в CRM.
-          </p>
-        </div>
-
         <div className="bar">
           <button className="btn btn--wide" onClick={reset}>Записати ще одну дитину</button>
         </div>
-      </>
+      </Frame>
     );
   }
 
   return null;
+}
+
+/* Общая рамка шагов: шапка раздела, лист с индикатором шагов. */
+function Frame({ idx, onBack, children }: { idx: number; onBack?: () => void; children: React.ReactNode }) {
+  return (
+    <div className="inner">
+      <PageHero
+        tone="peach"
+        crumb="Запис"
+        kicker={`пробне заняття за ${TRIAL_PRICE} ₴`}
+        title={<>Записатися <em>на пробне</em></>}
+        lead="Оберіть вік і заняття, залиште телефон. Передзвонимо протягом години, реєстрація не потрібна."
+        art={<Capy size={200} mood="wink" />}
+      />
+      <div className="sheet">
+        <div className="sheet-in">
+          <div className="flow-top">
+            {onBack && <button className="icon-btn" onClick={onBack} aria-label="Назад">←</button>}
+            <Steps items={['Вік', 'Заняття', 'Контакти', 'Готово']} current={idx} />
+          </div>
+          <div className="page flow-body" key={idx}>{children}</div>
+        </div>
+      </div>
+    </div>
+  );
 }

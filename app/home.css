@@ -1,0 +1,444 @@
+/* ============================================================
+   Главная. Классы с префиксом lp- (landing page), чтобы не пересекаться
+   со стилями внутренних страниц.
+
+   Движение: одна сцена на загрузке (буквы «плюхаются» на стену,
+   работы падают на верёвку и раскачиваются), бегущая строка и
+   отклик на наведение. Никаких «всплытий» каждой секции при скролле.
+   ============================================================ */
+
+.lp-sec{padding:72px 0}
+.lp-sec--tight{padding:48px 0}
+.lp-head{display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px 24px}
+.lp-head .t-h2{max-width:18ch}
+.lp-head .t-hand{transform:rotate(-3deg)}
+.lp-more{font-weight:700; color:var(--ink-900); text-decoration:none; border-bottom:2px solid var(--brand-orange); padding-bottom:2px}
+.lp-more:hover{color:var(--brand-orange-active)}
+
+/* ---------- hero ---------- */
+.lp-hero{position:relative; padding:10px 0 0}
+
+.plush{position:relative}
+.plush-waves{position:absolute; left:0; top:12%; width:100%; height:80%; overflow:visible}
+.plush-waves path{fill:none; stroke-width:6; stroke-linecap:round}
+.plush-waves path:nth-child(1){stroke:#F9B9D6}
+.plush-waves path:nth-child(2){stroke:#9FE3E3}
+.plush-waves path:nth-child(3){stroke:#FBD668}
+.plush-word{
+  position:relative; display:flex; align-items:flex-end; width:min(1180px,94%); margin:0 auto;
+  user-select:none; -webkit-user-select:none
+}
+.pl-l{
+  display:block; flex:none; cursor:pointer; transform-origin:50% 100%;
+  animation:plushIn .75s cubic-bezier(.3,1.6,.45,1) both
+}
+.pl-lean{display:block; transition:transform .5s cubic-bezier(.2,.9,.3,1.2); will-change:transform}
+.pl-wob{
+  display:block; transform-origin:50% 90%; will-change:transform;
+  animation:plushWob var(--wob,2.8s) ease-in-out var(--wob-delay,0s) infinite alternate
+}
+.pl-boing{display:block; transform-origin:50% 100%; will-change:transform}
+.pl-boing.is-boing{animation:plushBoing .9s cubic-bezier(.3,1.5,.5,1)}
+.pl-l svg{display:block; width:100%; height:auto; overflow:visible}
+.plush-glyph{font-family:var(--font-plush), var(--font-display), sans-serif; font-weight:900; font-size:270px; fill:var(--plush)}
+@keyframes plushIn{
+  0%{opacity:0; transform:translateY(-60px) scale(.6) rotate(-10deg)}
+  60%{opacity:1}
+  100%{opacity:1; transform:none}
+}
+@keyframes plushWob{
+  0%{transform:translateY(0) rotate(-2.5deg)}
+  100%{transform:translateY(-7px) rotate(2.5deg)}
+}
+@keyframes plushBoing{
+  0%{transform:none}
+  20%{transform:scale(1.14,.82)}
+  40%{transform:scale(.9,1.14) translateY(-14px)}
+  60%{transform:scale(1.06,.94)}
+  80%{transform:scale(.98,1.03)}
+  100%{transform:none}
+}
+
+.lp-hero-row{display:flex; flex-wrap:wrap; gap:24px 56px; align-items:flex-end; margin-top:12px}
+.lp-hero-text{flex:1 1 560px; min-width:0}
+.lp-pill{
+  display:inline-flex; align-items:center; gap:10px; background:#fff; border:2px solid var(--ink-900);
+  border-radius:999px; padding:7px 15px; font-weight:700; font-size:14px; transform:rotate(-2deg)
+}
+.lp-pill i{width:10px; height:10px; border-radius:50%; background:var(--accent-teal)}
+.lp-hero h1{margin:20px 0 0; font-size:clamp(34px,6.2vw,72px); max-width:15ch}
+.lp-blob{
+  display:inline-block; color:#fff; background:var(--brand-orange); padding:0 .2em;
+  border-radius:28px 44px 22px 48px; transform:rotate(-2deg)
+}
+.lp-hero .t-lead{margin-top:16px}
+.lp-hero-cta{flex:0 1 380px; display:flex; flex-direction:column; gap:14px}
+.lp-hero-cta .btn{display:grid; place-items:center; text-decoration:none; font-size:17px; min-height:58px}
+
+/* ---------- гирлянда ---------- */
+.lp-garland{position:relative; max-width:1360px; margin:40px auto 0; padding:0 var(--gutter); height:clamp(210px,31vw,410px)}
+.lp-garland-note{position:absolute; left:calc(var(--gutter) + 10px); top:-20px; transform:rotate(-3deg); z-index:2}
+.lp-rope{position:absolute; left:0; top:22px; width:100%; height:90px; overflow:visible}
+.lp-rope path{fill:none; stroke:var(--ink-900); stroke-width:2.5}
+.lp-pins{position:absolute; left:var(--gutter); right:var(--gutter); top:0; bottom:0}
+.lp-card{
+  margin:0;
+  position:absolute; width:14%; max-width:200px; background:#fff; padding:6% 6% 16%;
+  padding:clamp(5px,0.8vw,10px) clamp(5px,0.8vw,10px) clamp(14px,2vw,28px);
+  box-shadow:0 14px 30px rgba(27,18,48,.18);
+  transform-origin:50% 0;
+  animation:dropIn .9s cubic-bezier(.3,1.4,.5,1) both, swing 4.2s ease-in-out 1.2s infinite
+}
+.lp-card:nth-child(even){animation:dropIn .9s cubic-bezier(.3,1.4,.5,1) both, swing2 4.8s ease-in-out 1.2s infinite}
+.lp-card img{width:100%; aspect-ratio:1/1; object-fit:cover; display:block}
+.lp-card-pin{position:absolute; top:-14px; left:50%; width:10px; height:28px; margin-left:-5px; border-radius:3px}
+.lp-card figcaption{font-family:var(--font-hand); font-size:clamp(14px,1.6vw,20px); text-align:center; margin-top:4px; line-height:1.1}
+@keyframes dropIn{from{opacity:0; transform:translateY(-70px) rotate(-10deg)} to{opacity:1; transform:none}}
+@keyframes swing{0%,100%{transform:rotate(-2.5deg)} 50%{transform:rotate(2.5deg)}}
+@keyframes swing2{0%,100%{transform:rotate(2.5deg)} 50%{transform:rotate(-2.5deg)}}
+
+.lp-capy{position:absolute; right:var(--gutter); top:clamp(40px,6vw,70px); width:clamp(96px,14vw,190px); animation:float 5s ease-in-out infinite}
+.lp-capy svg{width:100%; height:auto; display:block}
+.lp-capy-say{
+  position:absolute; right:70%; top:-34px; white-space:nowrap; background:#fff; border:2px solid var(--ink-900);
+  border-radius:18px 18px 4px 18px; padding:6px 12px; font-family:var(--font-hand); font-size:clamp(16px,1.8vw,22px)
+}
+@keyframes float{0%,100%{transform:translateY(0) rotate(-4deg)} 50%{transform:translateY(-8px) rotate(-1deg)}}
+
+.lp-stats{display:flex; flex-wrap:wrap; gap:18px 48px; padding:28px 0 56px}
+.lp-stats b{display:block; font-family:var(--font-head); font-weight:800; font-size:30px; line-height:1.1}
+.lp-stat-l{font-size:15px; color:var(--ink-700)}
+
+/* ---------- бегущая строка ---------- */
+.lp-marquee{
+  background:var(--brand-orange); border-block:3px solid var(--ink-900);
+  overflow:hidden; transform:rotate(-1.2deg); margin:0 -24px
+}
+.lp-marquee-track{
+  display:flex; width:max-content; gap:40px; padding:16px 0;
+  font-family:var(--font-head); font-weight:800; font-size:clamp(20px,2.6vw,30px); white-space:nowrap;
+  animation:marquee 30s linear infinite
+}
+@keyframes marquee{to{transform:translateX(-50%)}}
+
+/* ---------- анонсы ---------- */
+.lp-events{display:grid; grid-auto-flow:column; grid-auto-columns:min(82%,340px); gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; margin:28px calc(var(--gutter) * -1) 0; padding:6px var(--gutter) 16px}
+.lp-event{
+  scroll-snap-align:start; display:flex; flex-direction:column; background:#fff; border:2px solid var(--ink-900);
+  border-radius:28px; overflow:hidden; text-decoration:none; color:inherit; box-shadow:6px 6px 0 var(--ink-900);
+  transition:transform .2s cubic-bezier(.3,1.5,.5,1), box-shadow .2s ease
+}
+.lp-event:hover{transform:translate(-2px,-2px) rotate(-.6deg); box-shadow:9px 9px 0 var(--ink-900)}
+.lp-event-cover{position:relative; aspect-ratio:4/5; background:var(--plum); overflow:hidden}
+.lp-event-cover img{width:100%; height:100%; object-fit:cover; display:block}
+.lp-event-cover--art{display:grid; place-items:center; padding:24px; text-align:center}
+.lp-event-cover--art span{font-family:var(--font-head); font-weight:800; font-size:28px; line-height:1.1; color:#fff}
+.lp-event-date{
+  position:absolute; left:14px; top:14px; background:var(--accent-yellow); color:var(--ink-900);
+  border:2px solid var(--ink-900); border-radius:16px; padding:6px 12px; text-align:center; line-height:1.05; transform:rotate(-4deg)
+}
+.lp-event-date b{display:block; font-family:var(--font-head); font-size:26px}
+.lp-event-date small{font-size:13px; font-weight:700}
+.lp-event-body{padding:18px 20px 20px; display:flex; flex-direction:column; gap:8px; flex:1}
+.lp-event-body h3{font-family:var(--font-head); font-weight:700; font-size:20px; line-height:1.15; margin:0}
+.lp-event-body p{margin:0; color:var(--ink-700); font-size:15px; line-height:1.45}
+.lp-event-meta{display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top:8px}
+.lp-tag{font-size:13px; font-weight:700; padding:5px 10px; border-radius:999px; background:var(--surface-soft)}
+.lp-tag--hot{background:var(--accent-pink); color:#fff}
+.lp-events-empty{
+  margin-top:24px; display:flex; flex-wrap:wrap; gap:16px 28px; align-items:center;
+  background:#fff; border:2px dashed var(--border-default); border-radius:28px; padding:24px
+}
+.lp-events-empty p{margin:0; flex:1 1 320px; color:var(--ink-700)}
+
+/* ---------- напрями (бенто) ---------- */
+.lp-bento{display:grid; grid-template-columns:1fr; grid-auto-rows:minmax(170px,auto); gap:14px; margin-top:32px}
+.lp-tile{
+  position:relative; border-radius:30px; overflow:hidden; text-decoration:none; color:var(--ink-900);
+  padding:22px; display:flex; flex-direction:column; justify-content:flex-end; gap:6px;
+  transition:transform .25s cubic-bezier(.3,1.5,.5,1)
+}
+.lp-tile:hover{transform:translateY(-5px) rotate(-.8deg)}
+.lp-tile h3{font-family:var(--font-head); font-weight:800; font-size:clamp(20px,2.1vw,30px); overflow-wrap:anywhere; margin:0; letter-spacing:-.02em}
+.lp-tile p{margin:0; font-size:15px}
+.lp-tile .lp-age{align-self:flex-start; font-weight:700; font-size:13px; padding:5px 11px; border-radius:999px; background:#fff; color:var(--ink-900)}
+.lp-tile--photo{min-height:300px; color:#fff; background:var(--ink-900)}
+.lp-tile--photo img{position:absolute; inset:0; width:100%; height:100%; object-fit:cover}
+.lp-tile--photo::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg,transparent 35%,rgba(27,18,48,.88))}
+.lp-tile--photo > *:not(img){position:relative; z-index:1}
+.lp-tile--plum{background:var(--plum); color:#fff}
+.lp-tile--yellow{background:var(--accent-yellow)}
+.lp-tile--teal{background:var(--accent-teal)}
+.lp-tile-deco{position:absolute; right:-26px; top:-26px; width:120px; height:120px; border-radius:50%; background:rgba(255,255,255,.4)}
+
+/* ---------- вікові групи: сходинки ---------- */
+.lp-steps{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:32px; align-items:end}
+.lp-step{
+  border:2px solid var(--ink-900); border-radius:28px; padding:20px; text-decoration:none; color:var(--ink-900);
+  display:flex; flex-direction:column; justify-content:space-between; gap:18px; min-height:200px;
+  transition:transform .25s cubic-bezier(.3,1.5,.5,1), box-shadow .2s ease
+}
+.lp-step:hover{transform:translateY(-6px); box-shadow:0 6px 0 var(--ink-900)}
+.lp-step b{font-family:var(--font-head); font-weight:800; font-size:clamp(34px,4.4vw,52px); line-height:1; display:block}
+.lp-step span{font-size:15px}
+.lp-step em{font-style:normal; font-weight:700; font-size:13px; background:#fff; padding:5px 11px; border-radius:999px; align-self:flex-start}
+.lp-step:nth-child(1){background:#fff}
+.lp-step:nth-child(1) em{background:var(--surface-soft)}
+.lp-step:nth-child(2){background:var(--accent-yellow)}
+.lp-step:nth-child(3){background:var(--accent-teal)}
+.lp-step:nth-child(4){background:var(--brand-orange)}
+
+/* ---------- All Inclusive ---------- */
+.lp-ai{background:var(--plum); color:#fff; border-radius:48px 48px 0 0; position:relative; overflow:hidden; margin-top:24px}
+.lp-ai-inner{display:flex; flex-wrap:wrap; gap:40px; align-items:center; padding:72px 0}
+.lp-ai-text{flex:1 1 480px; min-width:0}
+.lp-ai .lp-kicker{color:var(--accent-yellow); font-weight:700; font-size:15px}
+.lp-ai-price{font-family:var(--font-head); font-weight:800; font-size:clamp(64px,11vw,150px); line-height:.95; letter-spacing:-.04em; margin-top:12px}
+.lp-ai .t-hand{color:var(--accent-yellow); display:inline-block; transform:rotate(-2deg); margin-top:6px}
+.lp-ai p{color:#E8E0F7; font-size:19px; line-height:1.5; max-width:52ch}
+.lp-ai .btn{display:inline-grid; place-items:center; text-decoration:none; margin-top:18px}
+.lp-ai-photos{flex:1 1 340px; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; max-width:500px}
+.lp-ai-photos div{aspect-ratio:1/1; overflow:hidden}
+.lp-ai-photos img{width:100%; height:100%; object-fit:cover; display:block}
+.lp-ai-photos div:nth-child(1){border-radius:28px; transform:rotate(-3deg)}
+.lp-ai-photos div:nth-child(2){border-radius:50%; transform:translateY(26px)}
+.lp-ai-photos div:nth-child(3){border-radius:50% 50% 28px 28px}
+.lp-ai-photos div:nth-child(4){border-radius:28px; transform:rotate(4deg) translateY(26px)}
+
+/* ---------- свята + МК ---------- */
+.lp-duo{display:grid; grid-template-columns:1fr; gap:18px; margin-top:32px}
+.lp-promo{
+  position:relative; border-radius:36px; padding:28px; overflow:hidden; text-decoration:none; color:var(--ink-900);
+  display:flex; flex-direction:column; gap:12px; min-height:320px
+}
+.lp-promo h3{font-family:var(--font-head); font-weight:800; font-size:clamp(26px,3.2vw,40px); margin:0; letter-spacing:-.02em; max-width:13ch; line-height:1.05}
+.lp-promo p{margin:0; max-width:36ch; font-size:16px}
+.lp-promo .btn{align-self:flex-start; display:inline-grid; place-items:center; text-decoration:none; margin-top:auto}
+.lp-promo--bd{background:var(--plush); color:#fff}
+.lp-promo--bd p{color:#E3EAFF}
+.lp-promo--bd .lp-promo-capy{position:absolute; right:-6px; bottom:-10px; width:clamp(120px,16vw,190px)}
+.lp-promo--mk{background:#fff; border:2px solid var(--ink-900)}
+.lp-mk-strip{display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin:6px 0 4px}
+.lp-mk-strip figure{margin:0}
+.lp-mk-strip img{width:100%; aspect-ratio:1/1; object-fit:cover; border-radius:18px; display:block}
+.lp-mk-strip figcaption{font-size:13px; font-weight:700; margin-top:6px; line-height:1.2}
+.lp-mk-strip figcaption span{display:block; color:var(--brand-orange-active)}
+
+/* ---------- локації ---------- */
+.lp-places{display:grid; grid-template-columns:1fr; gap:14px; margin-top:28px}
+.lp-place{background:#fff; border:1.5px solid var(--border-subtle); border-radius:28px; padding:22px; box-shadow:var(--shadow-soft)}
+.lp-place h3{font-family:var(--font-head); font-weight:800; font-size:24px; margin:0}
+.lp-place p{margin:8px 0 0; color:var(--ink-700)}
+.lp-place a{display:inline-block; margin-top:12px; font-weight:700; color:var(--ink-900); border-bottom:2px solid var(--brand-orange); text-decoration:none}
+
+/* ---------- FAQ ---------- */
+.lp-faq{margin-top:24px; border-top:2px solid var(--ink-900)}
+.lp-faq details{border-bottom:2px solid var(--ink-900)}
+.lp-faq summary{
+  list-style:none; cursor:pointer; padding:20px 44px 20px 0; position:relative;
+  font-family:var(--font-head); font-weight:700; font-size:clamp(17px,2vw,21px)
+}
+.lp-faq summary::-webkit-details-marker{display:none}
+.lp-faq summary::after{
+  content:'+'; position:absolute; right:4px; top:50%; transform:translateY(-50%);
+  width:32px; height:32px; border-radius:50%; background:var(--brand-orange); display:grid; place-items:center;
+  font-family:var(--font-ui); font-size:22px; line-height:32px; text-align:center; transition:transform .25s ease
+}
+.lp-faq details[open] summary::after{transform:translateY(-50%) rotate(45deg)}
+.lp-faq p{margin:0 0 20px; color:var(--ink-700); max-width:70ch; line-height:1.6}
+
+/* ---------- финальный призыв ---------- */
+.lp-final{
+  position:relative; background:var(--accent-yellow); border:2px solid var(--ink-900); border-radius:40px;
+  padding:36px 28px; display:flex; flex-wrap:wrap; gap:24px; align-items:center; overflow:hidden
+}
+.lp-final h2{flex:1 1 420px; margin:0}
+.lp-final .btn{display:grid; place-items:center; text-decoration:none}
+.lp-final-capy{width:120px; flex:none}
+
+@media(min-width:760px){
+  .lp-bento{grid-template-columns:repeat(4,minmax(0,1fr)); grid-auto-rows:220px}
+  .lp-tile--photo{grid-column:span 2; grid-row:span 2}
+  .lp-tile--plum{grid-row:span 2}
+  .lp-steps{grid-template-columns:repeat(4,minmax(0,1fr))}
+  .lp-step:nth-child(1){min-height:230px}
+  .lp-step:nth-child(2){min-height:280px}
+  .lp-step:nth-child(3){min-height:330px}
+  .lp-step:nth-child(4){min-height:380px}
+  .lp-duo{grid-template-columns:1fr 1fr}
+  .lp-places{grid-template-columns:1fr 1fr}
+  .lp-events{grid-auto-flow:row; grid-template-columns:repeat(3,minmax(0,1fr)); grid-auto-columns:auto; overflow:visible; margin:28px 0 0; padding:6px 0 0}
+}
+@media(min-width:900px){
+  .lp-sec{padding:110px 0}
+  .lp-sec--tight{padding:64px 0}
+  .lp-garland{padding:0 40px}
+  .lp-pins{left:40px; right:40px}
+  .lp-capy{right:40px}
+  .lp-final{padding:48px 56px}
+  .lp-final-capy{width:170px}
+}
+@media(max-width:560px){
+  /* телефон: две работы на верёвке, справа Капі держит её конец */
+  .lp-garland{height:auto; padding:0 var(--gutter) 8px}
+  .lp-rope{top:14px}
+  .lp-pins{position:relative; left:0; right:0; display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; padding:22px 32% 0 2px}
+  .lp-card{position:relative !important; left:auto !important; top:auto !important; width:auto; max-width:none}
+  .lp-card:nth-child(2){margin-top:14px}
+  .lp-card:nth-child(n+3){display:none}
+  .lp-capy{position:absolute; right:var(--gutter); top:44px; width:29%}
+  .lp-capy-say{right:auto; left:50%; top:auto; bottom:100%; transform:translateX(-50%) rotate(-3deg); margin-bottom:6px; font-size:16px}
+  .lp-capy:hover .lp-capy-say{transform:translateX(-50%) rotate(-5deg) scale(1.06)}
+  .lp-stats{display:grid; grid-template-columns:1fr 1fr; gap:22px 16px; padding:28px 0 44px}
+  .lp-garland-note{font-size:18px; top:-26px}
+  .lp-capy{top:58px}
+}
+
+/* ============================================================
+   Дополнительное движение главной
+   ============================================================ */
+
+/* конфетти в первом экране: медленно плавают */
+.lp-confetti{position:absolute; inset:0; pointer-events:none; overflow:hidden}
+.lp-confetti i{position:absolute; display:block; border-radius:50%; animation:drift 9s ease-in-out infinite alternate}
+.lp-confetti i:nth-child(3n){border-radius:4px; transform:rotate(45deg)}
+@keyframes drift{
+  0%{transform:translate(0,0) rotate(0)}
+  100%{transform:translate(var(--dx,20px),var(--dy,-30px)) rotate(160deg)}
+}
+
+/* вторая лента: идёт навстречу первой, крест-накрест */
+.lp-tapes{position:relative; padding:18px 0 10px}
+.lp-marquee--plum{background:var(--plum); color:#fff; transform:rotate(1.6deg); margin-top:-12px}
+.lp-marquee--plum .lp-marquee-track{animation-direction:reverse; animation-duration:36s; color:#fff}
+
+/* появление при прокрутке: блоки «приклеиваются», как наклейки.
+   Прячем только если скрипт уже работает — без JS всё видно сразу. */
+.js-rv [data-reveal]{opacity:0; transform:translateY(34px) rotate(-2deg) scale(.96)}
+.js-rv [data-reveal="left"]{transform:translateX(-40px) rotate(-3deg)}
+.js-rv [data-reveal="pop"]{transform:scale(.6) rotate(-8deg)}
+.js-rv [data-reveal].is-in{
+  opacity:1; transform:none;
+  transition:opacity .6s ease, transform .8s cubic-bezier(.25,1.35,.45,1);
+  transition-delay:var(--rv-delay,0s)
+}
+
+/* лесенка возрастов растёт снизу вверх */
+.js-rv .lp-steps .lp-step{transform-origin:50% 100%; transform:scaleY(.3); opacity:0}
+.js-rv .lp-steps.is-in .lp-step{
+  transform:none; opacity:1;
+  transition:transform .9s cubic-bezier(.25,1.4,.45,1), opacity .4s ease
+}
+.js-rv .lp-steps.is-in .lp-step:nth-child(2){transition-delay:.12s}
+.js-rv .lp-steps.is-in .lp-step:nth-child(3){transition-delay:.24s}
+.js-rv .lp-steps.is-in .lp-step:nth-child(4){transition-delay:.36s}
+.js-rv .lp-steps.is-in .lp-step:hover{transform:translateY(-6px); transition-delay:0s}
+
+/* бенто: фото медленно приближается, пузырь растёт */
+.lp-tile--photo img{transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.lp-tile--photo:hover img{transform:scale(1.07)}
+.lp-tile-deco{transition:transform .6s cubic-bezier(.3,1.5,.5,1)}
+.lp-tile:hover .lp-tile-deco{transform:scale(1.5)}
+
+/* наклейка с датой на афише подпрыгивает */
+.lp-event:hover .lp-event-date{animation:stickerJump .6s cubic-bezier(.3,1.6,.5,1)}
+@keyframes stickerJump{0%{transform:rotate(-4deg)} 40%{transform:rotate(6deg) translateY(-8px) scale(1.08)} 100%{transform:rotate(-4deg)}}
+.lp-event-cover img{transition:transform .8s cubic-bezier(.2,.8,.2,1)}
+.lp-event:hover .lp-event-cover img{transform:scale(1.06)}
+
+/* All Inclusive: фото слегка покачиваются по очереди */
+.lp-ai-photos div{animation:bob 6s ease-in-out infinite}
+.lp-ai-photos div:nth-child(2){animation-delay:-1.5s}
+.lp-ai-photos div:nth-child(3){animation-delay:-3s}
+.lp-ai-photos div:nth-child(4){animation-delay:-4.5s}
+@keyframes bob{0%,100%{translate:0 0} 50%{translate:0 -10px}}
+
+/* Капі реагирует на наведение */
+.lp-capy:hover svg, .lp-final-capy:hover svg, .lp-promo:hover .lp-promo-capy svg{animation:capyHop .7s cubic-bezier(.3,1.6,.5,1)}
+@keyframes capyHop{0%{transform:none} 35%{transform:translateY(-18px) rotate(-6deg)} 70%{transform:translateY(0) scale(1.06,.94)} 100%{transform:none}}
+.lp-capy-say{transition:transform .3s cubic-bezier(.3,1.6,.5,1)}
+.lp-capy:hover .lp-capy-say{transform:rotate(-4deg) scale(1.08)}
+
+/* FAQ: ответ мягко раскрывается */
+.lp-faq details[open] p{animation:faqIn .45s ease}
+@keyframes faqIn{from{opacity:0; transform:translateY(-6px)} to{opacity:1; transform:none}}
+
+/* финальный призыв: кнопка зовёт */
+.lp-final .btn{animation:nudge 3.2s ease-in-out infinite}
+@keyframes nudge{0%,86%,100%{transform:none} 90%{transform:rotate(-4deg) scale(1.05)} 94%{transform:rotate(3deg) scale(1.05)}}
+
+/* после «приклеивания» возвращаем наведению его движение
+   (иначе transform:none у .is-in перебивал бы ховер) */
+.js-rv .lp-tile[data-reveal].is-in:hover{transform:translateY(-5px) rotate(-.8deg); transition-delay:0s}
+.js-rv .lp-event[data-reveal].is-in:hover{transform:translate(-2px,-2px) rotate(-.6deg); transition-delay:0s}
+.lp-hero .wrap{position:relative; z-index:1}
+@media(max-width:560px){ .lp-confetti i:nth-child(n+4){display:none} }
+
+/* ===== табір на главной ===== */
+.lp-camp-sec{padding-bottom:0}
+.lp-camp{
+  position:relative; display:grid; gap:28px; overflow:hidden; text-decoration:none; color:#fff;
+  padding:32px 24px; border-radius:36px; border:2px solid var(--ink-900); box-shadow:0 8px 0 var(--ink-900);
+  background:
+    radial-gradient(600px 400px at 90% 0%, rgba(140,90,220,.5), transparent 60%),
+    radial-gradient(500px 400px at 0% 100%, rgba(242,111,33,.35), transparent 60%),
+    linear-gradient(160deg, #1B1230, #2B1A4F);
+}
+@media(min-width:900px){ .lp-camp{grid-template-columns:1.1fr .9fr; padding:48px 52px; align-items:center} }
+.lp-camp-moon{
+  position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #FFF6D6, #FBD668 60%, #E9B93C); opacity:.9;
+  box-shadow:0 0 70px 18px rgba(251,214,104,.3)
+}
+.lp-camp-text{position:relative; z-index:1}
+.lp-camp-dates{
+  display:inline-block; padding:6px 14px; border-radius:999px; background:var(--brand-orange);
+  font-family:var(--font-head); font-weight:800; font-size:14px; transform:rotate(-3deg)
+}
+.lp-camp-title{font-family:var(--font-head); font-weight:800; font-size:clamp(30px,5vw,52px); line-height:1.04; letter-spacing:-.03em; margin:14px 0 0; color:#fff}
+.lp-camp-title em{font-style:normal; color:#FBD668; display:inline-block; animation:lpShiver 3.2s ease-in-out infinite}
+@keyframes lpShiver{
+  0%,82%,100%{transform:none}
+  84%{transform:translate(-2px,1px) rotate(-2deg)} 86%{transform:translate(2px,-1px) rotate(2deg)}
+  88%{transform:translate(-2px,0) rotate(-1deg)} 90%{transform:none}
+}
+.lp-camp-text > p{margin:12px 0 0; color:rgba(255,255,255,.82); font-size:17px; line-height:1.45; max-width:44ch}
+.lp-camp-days{list-style:none; padding:0; margin:20px 0 0; display:grid; gap:6px}
+.lp-camp-days li{display:flex; gap:10px; align-items:baseline; font-size:15.5px; color:rgba(255,255,255,.9)}
+.lp-camp-days b{flex:none; width:30px; color:#FBD668; font-family:var(--font-head)}
+.lp-camp-btn{margin-top:24px; display:inline-grid; place-items:center; box-shadow:0 5px 0 #0E0819}
+.lp-camp:hover .lp-camp-btn{background:var(--brand-orange-hover)}
+.lp-camp-posters{position:relative; height:300px}
+@media(min-width:900px){ .lp-camp-posters{height:420px} }
+.lp-camp-p{
+  position:absolute; top:50%; left:50%; width:44%; max-width:220px; border-radius:16px; border:4px solid #fff;
+  box-shadow:0 20px 40px rgba(0,0,0,.4); transition:transform .5s cubic-bezier(.25,1.35,.45,1)
+}
+.lp-camp-p--0{transform:translate(-120%,-46%) rotate(-10deg)}
+.lp-camp-p--1{transform:translate(-50%,-50%) rotate(2deg); z-index:2; width:52%; max-width:260px}
+.lp-camp-p--2{transform:translate(20%,-44%) rotate(9deg)}
+.lp-camp:hover .lp-camp-p--0{transform:translate(-132%,-50%) rotate(-14deg)}
+.lp-camp:hover .lp-camp-p--1{transform:translate(-50%,-54%) rotate(0) scale(1.04)}
+.lp-camp:hover .lp-camp-p--2{transform:translate(32%,-48%) rotate(13deg)}
+@media (prefers-reduced-motion: reduce){ .lp-camp-title em{animation:none} }
+
+/* ===== Halloween-вечірки на главной ===== */
+.lp-parties-sec{padding-bottom:0}
+.lp-parties{
+  display:flex; gap:18px; overflow-x:auto; scroll-snap-type:x mandatory; padding:30px max(var(--gutter), calc((100vw - var(--container)) / 2 + var(--gutter))) 26px;
+  scrollbar-width:none
+}
+.lp-parties::-webkit-scrollbar{display:none}
+.lp-party{
+  flex:none; width:230px; scroll-snap-align:center; position:relative; display:block; text-decoration:none; color:#fff;
+  border-radius:20px; overflow:hidden; aspect-ratio:3/4; background:#1C110B;
+  border:2px solid var(--ink-900); box-shadow:0 6px 0 var(--ink-900); transform:rotate(var(--tilt));
+  transition:transform .4s cubic-bezier(.25,1.35,.45,1), box-shadow .3s
+}
+.lp-party:hover{transform:translateY(-8px) rotate(0); box-shadow:0 12px 0 var(--ink-900), 0 0 0 4px var(--tone)}
+.lp-party img{position:absolute; top:0; left:-45%; width:190%; max-width:none; height:auto; transform-origin:50% 0; transition:transform .6s}
+.lp-party:hover img{transform:scale(1.07)}
+.lp-party::after{content:''; position:absolute; inset:0; background:linear-gradient(180deg, transparent 38%, rgba(20,10,5,.96) 76%)}
+.lp-party span{position:absolute; left:16px; right:16px; bottom:16px; z-index:1; font-family:var(--font-head); font-weight:800; font-size:20px; line-height:1.1; letter-spacing:-.02em}
+.lp-party span::before{content:''; display:block; width:28px; height:5px; border-radius:3px; background:var(--tone); margin-bottom:10px}
+@media(min-width:900px){ .lp-party{width:250px} }

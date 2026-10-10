@@ -21,6 +21,9 @@
    Пока переменной нет, работают демо-данные ниже (реальные события студии).
    ============================================================ */
 
+import { isSupabaseReady, selectCached, publicUrl } from './supabase';
+import { isoToKyivLocal, nowKyivLocal, type AnnouncementRow } from './content';
+
 export interface Announcement {
   id: string;
   title: string;
@@ -151,9 +154,42 @@ function rowsToAnnouncements(rows: string[][]): Announcement[] {
     .filter((a) => a.title && a.startsAt);
 }
 
+function rowToAnnouncement(r: AnnouncementRow): Announcement {
+  return {
+    id: r.id,
+    title: r.title,
+    cover: r.cover_path ? publicUrl(r.cover_path) : undefined,
+    startsAt: isoToKyivLocal(r.starts_at) ?? r.starts_at,
+    endsAt: isoToKyivLocal(r.ends_at),
+    place: r.place ?? undefined,
+    age: r.age ?? undefined,
+    short: r.short ?? '',
+    full: r.full_text ?? undefined,
+    price: r.price ?? undefined,
+    seats: r.seats,
+    link: r.link ?? undefined,
+    active: r.active,
+  };
+}
+
 /* ---------- публичное API ---------- */
 
 export async function getAnnouncements(): Promise<Announcement[]> {
+  /* Главный источник — админка (таблица announcements в Supabase).
+     Если база подключена, показываем только её — даже пустую:
+     студия сама решает, что анонсировать, демо-события там не нужны. */
+  if (isSupabaseReady()) {
+    try {
+      const rows = await selectCached<AnnouncementRow>(
+        'announcements',
+        'active=eq.true&order=starts_at.asc',
+      );
+      return rows.map(rowToAnnouncement);
+    } catch (error) {
+      console.error('[announcements] Supabase недоступний, показуємо резерв', error);
+    }
+  }
+
   const url = process.env.ANNOUNCEMENTS_CSV_URL;
   if (!url) return SEED;
 
@@ -168,10 +204,12 @@ export async function getAnnouncements(): Promise<Announcement[]> {
   }
 }
 
-function endMoment(a: Announcement): number {
-  const raw = a.endsAt || `${a.startsAt.slice(0, 10)} 23:59`;
-  const t = new Date(raw.replace(' ', 'T')).getTime();
-  return Number.isNaN(t) ? Date.now() + 1 : t;
+/* Все даты событий — киевское время в виде «2026-09-20 13:00».
+   Сравниваем их как строки с текущим киевским временем: формат
+   фиксированной ширины, лексикографический порядок = хронологический.
+   Так сервер в UTC не путает «сегодня вечером» со «вчера». */
+function endKey(a: Announcement): string {
+  return (a.endsAt || `${a.startsAt.slice(0, 10)} 23:59`).replace('T', ' ').slice(0, 16);
 }
 
 /* Прошедшие события уходят в архив сами — админу не нужно ничего снимать.
@@ -179,10 +217,10 @@ function endMoment(a: Announcement): number {
    Сортируем по дате окончания, а не начала: длинная акция, стартовавшая
    две недели назад, не должна оттеснять событие, которое уже послезавтра.
    Сверху всегда то, что сгорит раньше. */
-export function upcoming(list: Announcement[], now: Date = new Date()): Announcement[] {
+export function upcoming(list: Announcement[], now: string = nowKyivLocal()): Announcement[] {
   return list
-    .filter((a) => a.active && endMoment(a) >= now.getTime())
-    .sort((a, b) => endMoment(a) - endMoment(b));
+    .filter((a) => a.active && endKey(a) >= now)
+    .sort((a, b) => endKey(a).localeCompare(endKey(b)));
 }
 
 const MONTHS = [

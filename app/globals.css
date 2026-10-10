@@ -599,9 +599,76 @@ select.input{
   font:inherit; font-size:14px; font-weight:600; background:#fff; cursor:pointer
 }
 
+/* --- меню разделов --- */
+.admin-nav{display:flex; align-items:flex-start; justify-content:space-between; gap:8px; margin-bottom:18px}
+.admin-tabs{display:flex; flex-wrap:wrap; gap:6px; min-width:0}
+.admin-tab{
+  flex:none; padding:9px 12px; border-radius:999px; background:var(--surface-soft);
+  font-weight:700; font-size:14px; color:var(--ink-700); text-decoration:none; white-space:nowrap
+}
+.admin-tab.is-active{background:var(--ink-900); color:#fff}
+.admin-logout{
+  appearance:none; border:0; background:none; font:inherit; font-size:13px; font-weight:600;
+  color:var(--ink-500); cursor:pointer; padding:8px; flex:none
+}
+
+/* --- общие элементы разделов --- */
+.admin-toolbar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin-top:18px}
+.admin-grid{display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:18px}
+.admin-card{
+  background:#fff; border:1px solid var(--border-subtle); border-radius:18px; padding:10px;
+  display:flex; flex-direction:column; gap:8px; min-width:0
+}
+.admin-card.is-hidden .admin-card-img img{opacity:.4}
+.admin-card-img{
+  position:relative; aspect-ratio:1/1; border-radius:12px; overflow:hidden; background:var(--surface-soft);
+  display:grid; place-items:center
+}
+.admin-card-img img{width:100%; height:100%; object-fit:cover; display:block}
+.admin-card-title{font-weight:800; font-size:15px; line-height:1.25}
+.admin-flag{
+  position:absolute; left:8px; top:8px; background:var(--brand-orange); color:#fff;
+  font-size:11px; font-weight:800; padding:4px 8px; border-radius:999px
+}
+.admin-flag--muted{background:rgba(17,17,17,.7); left:auto; right:8px}
+.admin-empty{font-size:13px; color:var(--ink-400); font-weight:600}
+.admin-input{min-height:42px; padding:10px 12px; font-size:16px}
+.admin-check{display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; cursor:pointer}
+.admin-check input{width:20px; height:20px; accent-color:var(--brand-orange)}
+.admin-row{display:flex; align-items:center; flex-wrap:wrap; gap:4px 12px}
+.admin-icon{
+  appearance:none; border:1.5px solid var(--border-default); background:#fff; border-radius:10px;
+  width:36px; height:36px; font-size:16px; cursor:pointer
+}
+.admin-icon:disabled{opacity:.35; cursor:default}
+.admin-link{
+  appearance:none; border:0; background:none; font:inherit; font-size:14px; font-weight:700;
+  color:var(--brand-orange-active); cursor:pointer; padding:8px 0; min-height:36px
+}
+.admin-link--danger{color:var(--state-error)}
+
+/* --- анонсы --- */
+.admin-event{
+  display:flex; gap:12px; align-items:flex-start; padding:12px; margin-top:10px;
+  background:#fff; border:1px solid var(--border-subtle); border-radius:16px
+}
+.admin-event.is-hidden{opacity:.55}
+.admin-event-cover{width:72px; height:72px; object-fit:cover; border-radius:10px; flex:none}
+.admin-form textarea.input{min-height:auto; resize:vertical; line-height:1.45}
+.admin-2col{display:grid; grid-template-columns:1fr; gap:0 16px}
+.admin-cover{
+  margin-top:8px; width:180px; aspect-ratio:4/5; border-radius:12px; overflow:hidden;
+  background:var(--surface-soft); display:grid; place-items:center
+}
+.admin-cover img{width:100%; height:100%; object-fit:cover; display:block}
+
 @media(min-width:900px){
   .admin .kanban{overflow-x:visible; display:grid; grid-template-columns:repeat(5,1fr)}
   .admin .kanban-col{flex:auto}
+  .admin-grid{grid-template-columns:repeat(4,minmax(0,1fr)); gap:16px}
+  .admin-2col{grid-template-columns:1fr 1fr}
+  .admin-form{max-width:720px}
+  .admin-form .input{max-width:none}
 }
 
 /* Очень широкие экраны: не даём контенту расползтись */

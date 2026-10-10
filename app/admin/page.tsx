@@ -1,5 +1,4 @@
-import { isAuthorized, isAdminConfigured } from '@/lib/admin-auth';
-import { isSupabaseReady } from '@/lib/supabase';
+import { adminGate, AdminNav } from '@/components/admin/AdminGate';
 import { listLeads, hoursSince, STATUS_LABELS, SOURCE_LABELS, type Lead, type LeadStatus } from '@/lib/leads';
 import StatusPicker from './StatusPicker';
 
@@ -19,55 +18,8 @@ export default async function AdminPage({
 }) {
   const params = await searchParams;
 
-  if (!isAdminConfigured()) {
-    return (
-      <div className="page" style={{ paddingTop: 40 }}>
-        <h1 className="t-h1">Адмінка не налаштована</h1>
-        <p className="t-lead">
-          Задайте змінну <code>ADMIN_PASSWORD</code> у налаштуваннях проєкту —
-          після цього тут з’явиться вхід.
-        </p>
-      </div>
-    );
-  }
-
-  if (!(await isAuthorized())) {
-    return (
-      <div className="page" style={{ paddingTop: 40, maxWidth: 420 }}>
-        <h1 className="t-h1">Вхід</h1>
-        <p className="t-lead">Панель адміністратора студії.</p>
-
-        <form action="/admin/login" method="post" className="field">
-          <label className="t-label" htmlFor="password">Пароль</label>
-          <input
-            id="password"
-            name="password"
-            type="password"
-            className="input"
-            autoComplete="current-password"
-            autoFocus
-          />
-          {params.error && <p className="error">Невірний пароль</p>}
-          <button className="btn btn--wide" style={{ marginTop: 16 }} type="submit">
-            Увійти
-          </button>
-        </form>
-      </div>
-    );
-  }
-
-  if (!isSupabaseReady()) {
-    return (
-      <div className="page" style={{ paddingTop: 40 }}>
-        <h1 className="t-h1">База даних не підключена</h1>
-        <p className="t-lead">
-          Заявки поки що не зберігаються — вони пишуться в логи сервера.
-          Щоб вони потрапляли сюди, підключіть Supabase: інструкція в{' '}
-          <code>docs/SUPABASE.md</code>.
-        </p>
-      </div>
-    );
-  }
+  const gate = await adminGate(params.error);
+  if (gate) return gate;
 
   const leads = await listLeads(200);
   const byStatus = (status: LeadStatus) => leads.filter((l) => l.status === status);
@@ -78,7 +30,8 @@ export default async function AdminPage({
   const stale = leads.filter((l) => l.status === 'new' && hoursSince(l.created_at) >= 24).length;
 
   return (
-    <div className="page admin" style={{ paddingTop: 28 }}>
+    <div className="page admin" style={{ paddingTop: 20 }}>
+      <AdminNav active="leads" />
       <div className="admin-head">
         <div>
           <h1 className="t-h1">Заявки</h1>

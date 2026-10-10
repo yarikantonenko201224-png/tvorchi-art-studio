@@ -1,0 +1,72 @@
+/* ===== Сезон Halloween: лента-анонс, летучие мыши, тыква в TVORCHI ===== */
+
+.hw-banner{
+  position:relative; z-index:41; display:flex; align-items:center; justify-content:center; gap:10px 14px;
+  padding:9px 16px; background:#1B1230; color:#fff; text-decoration:none;
+  font-size:15px; line-height:1.25; overflow:hidden;
+  background-image:
+    radial-gradient(circle at 8% 50%, rgba(242,111,33,.35), transparent 120px),
+    radial-gradient(circle at 92% 50%, rgba(140,90,220,.35), transparent 140px);
+}
+.hw-banner b{font-family:var(--font-head); font-weight:700; letter-spacing:-.01em}
+.hw-banner-dates{color:#FBD668; font-weight:700}
+.hw-banner-pump{font-size:20px; display:inline-block; animation:hwPump 2.4s ease-in-out infinite}
+.hw-banner-cta{
+  flex:none; padding:5px 12px; border-radius:999px; background:var(--brand-orange); color:#fff;
+  font-weight:700; font-size:14px; transition:transform .2s
+}
+.hw-banner-cta i{font-style:normal; display:inline-block; transition:transform .2s}
+.hw-banner:hover .hw-banner-cta{transform:translateY(-1px)}
+.hw-banner:hover .hw-banner-cta i{transform:translateX(3px)}
+@keyframes hwPump{0%,100%{transform:rotate(-10deg) scale(1)} 50%{transform:rotate(10deg) scale(1.12)}}
+@media(max-width:560px){
+  .hw-banner{justify-content:space-between; font-size:14px; padding:8px 12px}
+  .hw-banner-dates{display:none}
+  .hw-banner-cta{font-size:13px; padding:5px 10px}
+}
+
+/* --- летучие мыши --- */
+.hw-bats{position:absolute; inset:0; pointer-events:none; overflow:hidden; z-index:0}
+@media(max-width:560px){ .hw-bat:nth-child(n+3){display:none} .hw-bat svg{transform:scale(.7)} }
+.hw-bat{
+  position:absolute; left:0; display:block; fill:#2B1A4F;
+  animation:hwFly 18s linear infinite; will-change:transform
+}
+.hw-bat svg{display:block; overflow:visible}
+.hw-bat-bob{display:block; animation:hwBob 1.6s ease-in-out infinite}
+.hw-wing{animation:hwFlap .32s ease-in-out infinite alternate}
+.hw-wing--l{transform-origin:60px 32px}
+.hw-wing--r{transform-origin:60px 32px}
+@keyframes hwFlap{from{transform:scaleY(1)} to{transform:scaleY(.25)}}
+@keyframes hwBob{0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)}}
+@keyframes hwFly{
+  0%{transform:translate(-120px,0)}
+  50%{transform:translate(50vw,var(--rise,40px))}
+  100%{transform:translate(calc(100vw + 120px),0)}
+}
+
+/* --- тыква вместо «O» --- */
+.plush-glyph.plush-glyph--pumpkin{fill:#F26F21}
+.pl-face{animation:hwGlow 3s ease-in-out infinite}
+@keyframes hwGlow{0%,100%{fill:#2B1A4F} 45%{fill:#2B1A4F} 50%{fill:#FBD668} 55%{fill:#2B1A4F}}
+.plush--halloween .plush-waves path:nth-child(1){stroke:#FFB37A}
+.plush--halloween .plush-waves path:nth-child(2){stroke:#B79BEA}
+.plush--halloween .plush-waves path:nth-child(3){stroke:#9ED9A6}
+
+/* --- шляпа Капі покачивается --- */
+.capy-hat{transform-origin:100px 54px; animation:hwHat 3.2s ease-in-out infinite}
+@keyframes hwHat{0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(5deg)}}
+
+@media (prefers-reduced-motion: reduce){
+  .hw-bat,.hw-bat-bob,.hw-wing,.hw-banner-pump,.pl-face,.capy-hat{animation:none}
+  .hw-bats{display:none}
+}
+
+.hw-banner-in{display:inline-flex; align-items:center; gap:10px; min-width:0; animation:hwSlide .5s cubic-bezier(.25,1.35,.45,1)}
+.hw-banner-text{min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
+@keyframes hwSlide{from{opacity:0; transform:translateY(12px)} to{opacity:1; transform:none}}
+.hw-banner-dots{display:flex; gap:5px; flex:none}
+.hw-banner-dots i{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.3); transition:background .3s, transform .3s}
+.hw-banner-dots i.is-on{background:#FBD668; transform:scale(1.25)}
+@media(max-width:560px){ .hw-banner-dots{display:none} .hw-banner-text{white-space:normal} }
+@media (prefers-reduced-motion: reduce){ .hw-banner-in{animation:none} }

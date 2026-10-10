@@ -3,8 +3,9 @@
    форма всё равно отвечает успехом, а данные не теряются молча. */
 
 import { insert, select, update, isSupabaseReady } from './supabase';
+import { notifyNewLead } from './notify';
 
-export type LeadSource = 'trial' | 'masterclass' | 'birthday' | 'certificate' | 'quiz';
+export type LeadSource = 'trial' | 'masterclass' | 'birthday' | 'certificate' | 'quiz' | 'camp' | 'party' | 'trip';
 export type LeadStatus = 'new' | 'called' | 'trial_planned' | 'client' | 'lost';
 
 export interface LeadInput {
@@ -58,10 +59,20 @@ export async function createLead(input: LeadInput): Promise<{ ok: boolean; store
     /* База ещё не подключена. Пишем в лог, чтобы заявку можно было
        достать из логов Vercel, и честно сообщаем вызывающему коду. */
     console.warn('[lead] Supabase не підключено, заявка лише в логах:', JSON.stringify(row));
+    await notifyNewLead(input);
     return { ok: true, stored: false };
   }
 
-  await insert('leads', row);
+  /* Сначала база, потом Telegram: если база упала, заявка хотя бы
+     придёт администратору сообщением и останется в логах. */
+  try {
+    await insert('leads', row);
+  } catch (error) {
+    console.error('[lead] Не вдалося зберегти в Supabase, заявка:', JSON.stringify(row), error);
+    await notifyNewLead(input);
+    throw error;
+  }
+  await notifyNewLead(input);
   return { ok: true, stored: true };
 }
 
@@ -93,4 +104,7 @@ export const SOURCE_LABELS: Record<LeadSource, string> = {
   birthday: 'День народження',
   certificate: 'Сертифікат',
   quiz: 'Підбір',
+  camp: 'Табір',
+  party: 'Halloween-вечірка',
+  trip: 'Поїздка',
 };

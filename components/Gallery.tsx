@@ -1,11 +1,12 @@
 import Image from 'next/image';
-import { GALLERY } from '@/lib/photos';
+import { getGallery } from '@/lib/content';
 
 /* Галерея работ. Если фото ещё не загружены — блок не рендерится вовсе:
    лучше без секции, чем с пустыми рамками. */
-export default function Gallery({ limit = 6 }: { limit?: number }) {
-  if (!GALLERY.length) return null;
-  const items = GALLERY.slice(0, limit);
+export default async function Gallery({ limit = 6 }: { limit?: number }) {
+  /* Источник — админка (Supabase). Пока там пусто — временные фото из lib/photos.ts. */
+  const items = await getGallery({ limit });
+  if (!items.length) return null;
 
   return (
     <section style={{ marginTop: 36 }}>
@@ -14,7 +15,7 @@ export default function Gallery({ limit = 6 }: { limit?: number }) {
 
       <div className="gallery">
         {items.map((p) => (
-          <figure key={p.src} className="gallery-item">
+          <figure key={p.src} className="gallery-item" title={p.caption}>
             <Image
               src={p.src}
               alt={p.alt}

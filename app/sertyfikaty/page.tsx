@@ -2,8 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import PageHero from '@/components/PageHero';
+import Capy from '@/components/Capy';
 import { masterClassesFor, PRICES, STUDIO, TRIAL_PRICE } from '@/lib/data';
 import { formatPhone, isPhoneComplete, isEmail, peopleWord, childrenWord } from '@/lib/format';
+import { sendLead } from '@/lib/send-lead';
 
 /* Подарочный сертификат.
 
@@ -56,6 +59,7 @@ export default function CertificatesPage() {
   const [comment, setComment] = useState('');
   const [touched, setTouched] = useState(false);
   const [sent, setSent] = useState(false);
+  const [sending, setSending] = useState(false);
 
   const kinds: Kind[] =
     recipient === 'kids'
@@ -94,21 +98,57 @@ export default function CertificatesPage() {
   const amountOk = kind !== 'amount' || (total ?? 0) > 0;
   const formOk = nameOk && phoneOk && emailOk && amountOk;
 
-  function submit() {
+  async function submit() {
     setTouched(true);
-    if (!formOk) return;
-    /* Заявка пока никуда не уходит: здесь будет запись в CRM
-       и уведомление администратору. */
+    if (!formOk || sending) return;
+    setSending(true);
+    await sendLead({
+      source: 'certificate',
+      parentName: fromName.trim() || undefined,
+      phone,
+      email: email.trim() || undefined,
+      direction: kind === 'masterclass' && chosenMc ? `Сертифікат: ${chosenMc.title}` : `Сертифікат: ${KIND_LABELS[kind]}`,
+      people: kind === 'masterclass' ? people : undefined,
+      amount: priceUnknown ? undefined : total ?? undefined,
+      payload: {
+        recipient: recipient === 'kids' ? 'дитині' : 'дорослому',
+        kind: KIND_LABELS[kind],
+        lesson: kind === 'lesson' ? chosenLesson.label : undefined,
+        masterclass: kind === 'masterclass' ? chosenMc?.title : undefined,
+        format: format === 'digital' ? 'електронний' : 'друкований',
+        toName: toName.trim(),
+        fromName: fromName.trim() || undefined,
+        comment: comment.trim() || undefined,
+        total: totalLabel,
+      },
+    });
+    setSending(false);
     setSent(true);
     window.scrollTo(0, 0);
   }
 
+  const what =
+    kind === 'lesson' ? chosenLesson.label
+    : kind === 'masterclass' && chosenMc ? `Майстер-клас «${chosenMc.title}»${people > 1 ? ` на ${people} ${peopleWord(people)}` : ''}`
+    : kind === 'amount' ? 'Будь-які заняття студії'
+    : KIND_LABELS[kind];
+  const preview = (
+    <CertPreview
+      to={toName.trim()}
+      from={fromName.trim()}
+      what={what}
+      total={priceUnknown ? '' : totalLabel === '—' ? '' : totalLabel}
+      adult={recipient === 'adults'}
+      printed={format === 'printed'}
+    />
+  );
+
   /* ---------------- готово ---------------- */
   if (sent) {
     return (
-      <>
-        <div className="page">
-          <svg width="76" height="76" viewBox="0 0 76 76" style={{ display: 'block', margin: '40px auto 0' }} aria-hidden="true">
+      <CertFrame preview={preview}>
+        <div>
+          <svg width="76" height="76" viewBox="0 0 76 76" style={{ display: 'block', margin: '10px auto 0' }} aria-hidden="true">
             <circle cx="38" cy="38" r="36" fill="#E9F7F7" />
             <path d="M23 39.5 33.5 50 54 27" fill="none" stroke="#12706F" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
@@ -138,32 +178,21 @@ export default function CertificatesPage() {
               : 'Друкований сертифікат підготуємо в студії — скажемо, коли можна забрати.'}
           </div>
 
-          <p className="t-small" style={{ marginTop: 18, textAlign: 'center' }}>
-            Прототип: заявка ще не відправляється в CRM.
-          </p>
         </div>
 
         <div className="bar">
-          <Link className="btn btn--wide" href="/i" style={{ display: 'grid', placeItems: 'center' }}>
+          <Link className="btn btn--wide" href="/" style={{ display: 'grid', placeItems: 'center' }}>
             На головну
           </Link>
         </div>
-      </>
+      </CertFrame>
     );
   }
 
   return (
-    <>
-      <div className="page">
-        <div className="topbar">
-          <Link className="icon-btn" href="/i" aria-label="Назад">←</Link>
-        </div>
-
-        <h1 className="t-h1" style={{ marginTop: 18 }}>Подарунковий сертифікат</h1>
-        <p className="t-lead">
-          Творчий подарунок для дитини або дорослого. Зберіть сертифікат —
-          ми підготуємо його в електронному або друкованому вигляді.
-        </p>
+    <CertFrame preview={preview}>
+      <div>
+        <h2 className="t-h2 flow-q" style={{ marginTop: 0 }}>Зберіть сертифікат</h2>
 
         {/* 1. Кому */}
         <div className="field">
@@ -422,6 +451,9 @@ export default function CertificatesPage() {
           залишок зберігається до кінця терміну. Якщо послуга дорожча за номінал —
           різницю можна доплатити.
         </div>
+        <p className="t-small" style={{ marginTop: 14 }}>
+          Замовляючи сертифікат, ви погоджуєтесь з <Link href="/polityka-konfidentsiinosti" style={{ textDecoration: 'underline' }}>політикою конфіденційності</Link>.
+        </p>
       </div>
 
       <div className="bar">
@@ -429,8 +461,51 @@ export default function CertificatesPage() {
           <div className="k">Сертифікат</div>
           <div className="v">{totalLabel}</div>
         </div>
-        <button className="btn" onClick={submit}>Замовити</button>
+        <button className="btn" onClick={submit} disabled={sending}>
+          {sending ? 'Відправляємо…' : 'Замовити'}
+        </button>
       </div>
-    </>
+    </CertFrame>
+  );
+}
+
+/* Живой предпросмотр: сертификат меняется по мере заполнения формы. */
+function CertPreview({ to, from, what, total, adult, printed }: { to: string; from: string; what: string; total: string; adult: boolean; printed: boolean }) {
+  return (
+    <div className={`cert${adult ? ' cert--adult' : ''}`} aria-label="Попередній перегляд сертифіката">
+      <span className="cert-ribbon" aria-hidden="true">{printed ? 'друкований' : 'електронний'}</span>
+      <div className="cert-top">
+        <b className="cert-logo">TVORCHI</b>
+      </div>
+      <p className="cert-kicker">Подарунковий сертифікат</p>
+      <p className="cert-to" key={to}>{to || <i>Ім’я отримувача</i>}</p>
+      <p className="cert-what" key={what}>{what}</p>
+      {total && <p className="cert-total" key={total}>{total}</p>}
+      <div className="cert-foot">
+        <span>{from ? `з любов’ю від ${from}` : 'від вас із любов’ю'}</span>
+        <span>дійсний 3 місяці</span>
+      </div>
+      <span className="cert-capy" aria-hidden="true"><Capy size={84} mood="wink" /></span>
+    </div>
+  );
+}
+
+function CertFrame({ preview, children }: { preview: React.ReactNode; children: React.ReactNode }) {
+  return (
+    <div className="inner">
+      <PageHero
+        tone="sky"
+        crumb="Сертифікати"
+        kicker="творчий подарунок"
+        title={<>Подарунковий <em>сертифікат</em></>}
+        lead="Для дитини або дорослого: заняття, абонемент, майстер-клас чи сума на вибір. Зберіть сертифікат і подивіться, як він виглядатиме."
+      />
+      <div className="sheet">
+        <div className="cert-layout">
+          <div className="sheet-in">{children}</div>
+          <aside className="cert-side">{preview}</aside>
+        </div>
+      </div>
+    </div>
   );
 }
