@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { STUDIO, TRIAL_PRICE } from '@/lib/data';
@@ -76,7 +77,9 @@ export default function Header() {
         </button>
       </div>
 
-      {open && (
+      {/* Меню рендерим прямо в body: у шапки есть backdrop-filter, а он
+          делает её «рамкой» для position:fixed, и меню сжималось до высоты шапки. */}
+      {open && createPortal(
         <div className="hdr-menu" id="site-menu" role="dialog" aria-modal="true" aria-label="Меню">
           <div className="hdr-menu-top">
             <Link href="/" className="hdr-logo" aria-label="TVORCHI — на головну">
@@ -101,9 +104,14 @@ export default function Header() {
           <div className="hdr-menu-foot">
             <Link className="btn" href="/zapys">Записатися на пробне · {TRIAL_PRICE} ₴</Link>
             <a className="btn btn--ghost" href={STUDIO.phoneHref}>Подзвонити {STUDIO.phone}</a>
-            <a className="btn btn--ghost" href={STUDIO.instagram} target="_blank" rel="noopener">Instagram студії</a>
+            <div className="hdr-menu-msg">
+              <a className="btn btn--ghost" href={STUDIO.telegram} target="_blank" rel="noopener">Telegram</a>
+              <a className="btn btn--ghost" href={STUDIO.viber}>Viber</a>
+              <a className="btn btn--ghost" href={STUDIO.instagram} target="_blank" rel="noopener">Instagram</a>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body,
       )}
     </header>
   );

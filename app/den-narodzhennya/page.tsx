@@ -365,6 +365,10 @@ export default function BirthdayPage() {
                  style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
                 Viber
               </a>
+              <a className="btn btn--ghost btn--small btn--wide" href={STUDIO.telegram} target="_blank" rel="noopener"
+                 style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
+                Telegram
+              </a>
               <a className="btn btn--ghost btn--small btn--wide" href={STUDIO.phoneHref}
                  style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
                 Подзвонити

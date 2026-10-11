@@ -264,7 +264,12 @@ export default function BookingPage() {
           <div style={{ display: 'flex', gap: 10, marginTop: 18 }}>
             <a className="btn btn--ghost btn--small btn--wide" href={STUDIO.viber}
                style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
-              Написати у Viber
+              Viber
+            </a>
+            <a className="btn btn--ghost btn--small btn--wide" href={STUDIO.telegram}
+               target="_blank" rel="noopener"
+               style={{ display: 'grid', placeItems: 'center', textDecoration: 'none' }}>
+              Telegram
             </a>
             <a className="btn btn--ghost btn--small btn--wide" href={STUDIO.instagram}
                target="_blank" rel="noopener"

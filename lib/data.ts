@@ -39,11 +39,14 @@ export const STUDIO = {
   phone: '+380 96 336 07 38',
   phoneHref: 'tel:+380963360738',
   instagram: 'https://www.instagram.com/tvorchi_artstudio_/',
-  viber: 'viber://chat?number=%2B380963360738',
+  /* viber://chat открывает чат только если номер уже есть в контактах,
+     иначе Viber пишет «Запит недоступний». contact открывает карточку с кнопкой «Написати». */
+  viber: 'viber://contact?number=%2B380963360738',
+  telegram: 'https://t.me/+380963360738',
   city: 'Кременчук',
   locations: [
-    { slug: 'rakivka', title: 'Раківка', address: '' },
-    { slug: 'molodizhny', title: 'Молодіжний', address: 'вул. Лесі Українки, 37А' },
+    { slug: 'rakivka', title: 'Раківка', address: 'вул. Білаша, 2Г', note: 'Основна локація: усі вікові групи, майстер-класи, репетиторство.' },
+    { slug: 'molodizhny', title: 'Молодіжний', address: 'вул. Лесі Українки, 37А', note: 'Англійська, малювання, робототехніка, підготовка до школи.' },
   ],
 } as const;
 

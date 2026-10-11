@@ -2,6 +2,7 @@ import Link from 'next/link';
 import Plush from '@/components/home/Plush';
 import Capy from '@/components/Capy';
 import EventCard from '@/components/EventCard';
+import Places from '@/components/Places';
 import Reveal from '@/components/home/Reveal';
 import CountUp from '@/components/home/CountUp';
 import { getAnnouncements, upcoming } from '@/lib/announcements';
@@ -368,19 +369,7 @@ export default async function HomePage() {
           <div className="lp-head">
             <h2 className="t-h2">Дві студії в Кременчуці</h2>
           </div>
-          <div className="lp-places">
-            <div className="lp-place" data-reveal>
-              <h3>Раківка</h3>
-              <p>Основна локація: усі вікові групи, майстер-класи, репетиторство.</p>
-              <a href={STUDIO.phoneHref}>Уточнити адресу: {STUDIO.phone}</a>
-            </div>
-            <div className="lp-place" data-reveal>
-              <h3>Молодіжний</h3>
-              <p>вул. Лесі Українки, 37А. Англійська, малювання, робототехніка.</p>
-              <a href="https://www.google.com/maps/search/?api=1&query=%D0%9A%D1%80%D0%B5%D0%BC%D0%B5%D0%BD%D1%87%D1%83%D0%BA%2C+%D0%B2%D1%83%D0%BB.+%D0%9B%D0%B5%D1%81%D1%96+%D0%A3%D0%BA%D1%80%D0%B0%D1%97%D0%BD%D0%BA%D0%B8%2C+37%D0%90"
-                 target="_blank" rel="noopener">Відкрити на мапі</a>
-            </div>
-          </div>
+          <Places />
         </div>
       </section>
 

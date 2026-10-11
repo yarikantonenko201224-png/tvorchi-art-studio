@@ -442,3 +442,12 @@
 .lp-party span{position:absolute; left:16px; right:16px; bottom:16px; z-index:1; font-family:var(--font-head); font-weight:800; font-size:20px; line-height:1.1; letter-spacing:-.02em}
 .lp-party span::before{content:''; display:block; width:28px; height:5px; border-radius:3px; background:var(--tone); margin-bottom:10px}
 @media(min-width:900px){ .lp-party{width:250px} }
+
+/* ===== локации с картой ===== */
+.lp-place{padding:0; overflow:hidden; border:2px solid var(--ink-900); box-shadow:0 6px 0 var(--ink-900)}
+.lp-place-map{position:relative; height:220px; background:#EDE6DC; border-bottom:2px solid var(--ink-900)}
+.lp-place-map iframe{display:block; width:100%; height:100%; border:0; filter:saturate(.9)}
+.lp-place-pin{position:absolute; left:14px; top:14px; padding:6px 12px; border-radius:999px; background:var(--brand-orange); color:#fff; font-weight:800; font-size:14px; border:2px solid var(--ink-900); pointer-events:none}
+.lp-place-body{padding:20px 22px 24px}
+.lp-place-addr{font-family:var(--font-head); font-weight:700; font-size:18px; color:var(--ink-900) !important; margin-top:4px !important}
+@media(min-width:900px){ .lp-place-map{height:280px} }

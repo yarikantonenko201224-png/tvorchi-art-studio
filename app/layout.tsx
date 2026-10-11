@@ -63,12 +63,12 @@ function orgJsonLd() {
     telephone: STUDIO.phone.replace(/\s/g, ''),
     sameAs: [STUDIO.instagram],
     areaServed: STUDIO.city,
-    address: {
+    address: STUDIO.locations.map((l) => ({
       '@type': 'PostalAddress',
-      streetAddress: 'вул. Лесі Українки, 37А',
+      streetAddress: l.address,
       addressLocality: 'Кременчук',
       addressCountry: 'UA',
-    },
+    })),
     priceRange: '₴₴',
   };
 }

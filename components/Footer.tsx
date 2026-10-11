@@ -22,8 +22,7 @@ export default function Footer() {
           <div className="ftr-col">
             <h3>Де ми</h3>
             <ul>
-              <li>Раківка: усі вікові групи</li>
-              <li>Молодіжний: вул. Лесі Українки, 37А</li>
+              {STUDIO.locations.map((l) => <li key={l.slug}>{l.title}: {l.address}</li>)}
             </ul>
           </div>
           <div className="ftr-col">
@@ -31,6 +30,7 @@ export default function Footer() {
             <ul>
               <li><a href={STUDIO.phoneHref}>{STUDIO.phone}</a></li>
               <li><a href={STUDIO.instagram} target="_blank" rel="noopener">Instagram</a></li>
+              <li><a href={STUDIO.telegram} target="_blank" rel="noopener">Telegram</a></li>
               <li><a href={STUDIO.viber}>Viber</a></li>
             </ul>
           </div>

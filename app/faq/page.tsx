@@ -57,6 +57,8 @@ export default function FaqPage() {
             <h2 className="t-h3">Не знайшли відповіді?</h2>
             <p>Напишіть або зателефонуйте нам, із радістю допоможемо.</p>
             <a className="btn" href={STUDIO.phoneHref}>{STUDIO.phone}</a>
+            <a className="btn btn--ghost" href={STUDIO.telegram} target="_blank" rel="noopener">Telegram</a>
+            <a className="btn btn--ghost" href={STUDIO.viber}>Viber</a>
             <a className="btn btn--ghost" href={STUDIO.instagram} target="_blank" rel="noopener">Direct в Instagram</a>
             <Link className="faq-help-link" href="/zapys">або одразу записатися на пробне →</Link>
           </aside>
