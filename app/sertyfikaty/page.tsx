@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import PageHero from '@/components/PageHero';
 import Capy from '@/components/Capy';
-import { masterClassesFor, PRICES, STUDIO, TRIAL_PRICE } from '@/lib/data';
+import { masterClassesFor, PRICES, STUDIO, TRIAL_PRICE, type MasterClass } from '@/lib/data';
 import { formatPhone, isPhoneComplete, isEmail, peopleWord, childrenWord } from '@/lib/format';
 import { sendLead } from '@/lib/send-lead';
 
@@ -66,7 +66,14 @@ export default function CertificatesPage() {
       ? ['lesson', 'masterclass', 'other', 'amount']
       : ['individual', 'masterclass', 'other', 'amount'];
 
-  const catalog = masterClassesFor(recipient);
+  /* Первым пунктом — сертификат на любой майстер-клас: получатель выберет сам. */
+  const list = masterClassesFor(recipient);
+  const minPrice = Math.min(...list.map((m) => m[recipient]!.price));
+  const ANY: MasterClass = {
+    slug: 'any', title: 'Будь-який майстер-клас на вибір',
+    kids: { price: minPrice, from: true }, adults: { price: minPrice, from: true },
+  };
+  const catalog = [ANY, ...list];
   const chosenMc = catalog.find((m) => m.slug === mcSlug) ?? catalog[0];
   const chosenLesson = LESSON_OPTIONS.find((l) => l.id === lessonId)!;
 
@@ -129,7 +136,7 @@ export default function CertificatesPage() {
 
   const what =
     kind === 'lesson' ? chosenLesson.label
-    : kind === 'masterclass' && chosenMc ? `Майстер-клас «${chosenMc.title}»${people > 1 ? ` на ${people} ${peopleWord(people)}` : ''}`
+    : kind === 'masterclass' && chosenMc ? `${chosenMc.slug === 'any' ? 'Майстер-клас на вибір' : `Майстер-клас «${chosenMc.title}»`}${people > 1 ? ` на ${people} ${peopleWord(people)}` : ''}`
     : kind === 'amount' ? 'Будь-які заняття студії'
     : KIND_LABELS[kind];
   const preview = (
@@ -242,17 +249,26 @@ export default function CertificatesPage() {
         {kind === 'masterclass' && chosenMc && (
           <>
             <div className="field">
-              <label className="t-label" htmlFor="mc">Який майстер-клас</label>
-              <select id="mc" className="input" value={chosenMc.slug} onChange={(e) => setMcSlug(e.target.value)}>
+              <span className="t-label">Який майстер-клас</span>
+              <div className="mc-pick" role="radiogroup" aria-label="Майстер-клас">
                 {catalog.map((m) => {
                   const p = m[recipient]!;
+                  const on = chosenMc.slug === m.slug;
                   return (
-                    <option key={m.slug} value={m.slug}>
-                      {m.title} — {p.from ? 'від ' : ''}{p.price} ₴
-                    </option>
+                    <button
+                      key={m.slug}
+                      type="button"
+                      role="radio"
+                      aria-checked={on}
+                      className={`mc-opt${m.slug === 'any' ? ' mc-opt--any' : ''}${on ? ' is-on' : ''}`}
+                      onClick={() => setMcSlug(m.slug)}
+                    >
+                      <b>{m.title}</b>
+                      <span>{p.from ? 'від ' : ''}{p.price} ₴{m.slug === 'any' ? ' · отримувач обере сам' : ''}</span>
+                    </button>
                   );
                 })}
-              </select>
+              </div>
             </div>
 
             <div className="field">
