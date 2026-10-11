@@ -1,11 +1,14 @@
 import { NextResponse } from 'next/server';
 import { revalidateTag } from 'next/cache';
-import { isAuthorized } from './admin-auth';
+import { isAuthorized, isSameOrigin } from './admin-auth';
 import { isSupabaseReady, CONTENT_TAG } from './supabase';
 
 /* Общие проверки для всех /api/admin/*.
    Без входа в админку и без подключённой базы ничего менять нельзя. */
 export async function guard(): Promise<NextResponse | null> {
+  if (!(await isSameOrigin())) {
+    return NextResponse.json({ error: 'Запит з іншого сайту відхилено' }, { status: 403 });
+  }
   if (!(await isAuthorized())) {
     return NextResponse.json({ error: 'Потрібно увійти в адмінку' }, { status: 401 });
   }

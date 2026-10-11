@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isAuthorized } from '@/lib/admin-auth';
+import { isAuthorized, isSameOrigin } from '@/lib/admin-auth';
 import { setLeadStatus, type LeadStatus } from '@/lib/leads';
 
 const STATUSES: LeadStatus[] = ['new', 'called', 'trial_planned', 'client', 'lost'];
@@ -7,7 +7,7 @@ const STATUSES: LeadStatus[] = ['new', 'called', 'trial_planned', 'client', 'los
 export async function POST(request: Request) {
   /* Смена статуса доступна только из админки: без этой проверки
      любой желающий мог бы перекладывать чужие заявки. */
-  if (!(await isAuthorized())) {
+  if (!(await isSameOrigin()) || !(await isAuthorized())) {
     return NextResponse.json({ error: 'unauthorized' }, { status: 401 });
   }
 

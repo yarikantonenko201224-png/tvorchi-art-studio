@@ -33,7 +33,7 @@ export async function adminGate(error?: string): Promise<React.ReactElement | nu
             autoComplete="current-password"
             autoFocus
           />
-          {error && <p className="error">Невірний пароль</p>}
+          {error && <p className="error">{error === 'locked' ? 'Забагато спроб. Спробуйте через 15 хвилин.' : 'Невірний пароль'}</p>}
           <button className="btn btn--wide" style={{ marginTop: 16 }} type="submit">
             Увійти
           </button>
