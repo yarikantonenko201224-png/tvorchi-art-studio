@@ -1,6 +1,6 @@
 import type { MetadataRoute } from 'next';
 import { SITE_URL } from '@/lib/site';
-import { AUTUMN_CAMP, AUTUMN_TRIP, PARTIES } from '@/lib/events';
+import { AUTUMN_CAMP, AUTUMN_TRIP, OCT_SERIES, PARTIES } from '@/lib/events';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -17,6 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     [`/anonsy/${AUTUMN_CAMP.slug}`, 0.7, 'weekly'],
     [`/anonsy/${AUTUMN_TRIP.slug}`, 0.6, 'weekly'],
     [`/anonsy/${PARTIES.slug}`, 0.7, 'weekly'],
+    [`/anonsy/${OCT_SERIES.slug}`, 0.8, 'weekly'],
     ['/polityka-konfidentsiinosti', 0.2, 'yearly'],
   ];
   return pages.map(([path, priority, changeFrequency]) => ({

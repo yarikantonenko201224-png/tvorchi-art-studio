@@ -33,7 +33,7 @@ const PAYLOAD_LABELS: Record<string, string> = {
   recipient: 'Кому', kind: 'Що', lesson: 'Заняття', masterclass: 'МК', format: 'Формат',
   toName: 'Отримувач', fromName: 'Від кого', comment: 'Коментар',
   camp: 'Табір', campFormat: 'Формат',
-  event: 'Подія', venue: 'Де', addons: 'Додати', seats: 'Місць', kids: 'Дітей',
+  event: 'Подія', session: 'Захід і дата', venue: 'Де', addons: 'Додати', seats: 'Місць', kids: 'Дітей',
 };
 
 export function formatLeadMessage(lead: LeadInput): string {

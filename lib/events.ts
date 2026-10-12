@@ -173,6 +173,90 @@ export const AUTUMN_TRIP = {
   ],
 };
 
+/* ---------- Жовтневі заходи: серія майстер-класів і вечірок ---------- */
+
+export interface SeriesSession { place: 'Молодіжний' | 'Раківка'; date: string; time: string } // date: YYYY-MM-DD
+export interface SeriesEvent { id: string; title: string; lead: string; poster: string; icon: string; tone: string; sessions: SeriesSession[] }
+
+export const OCT_SERIES = {
+  slug: 'zhovtnevi-zakhody',
+  title: 'Жовтневі заходи разом із TVORCHI',
+  question: 'Яку осінню пригоду обере твоя дитина?',
+  range: '16.10 – 01.11',
+  cover: '/events/zhovten/cover.jpg',
+  intro: 'Ми вже підготували для маленьких творців цілу серію осінніх заходів у TVORCHI.',
+  doing: [
+    { icon: '👻', text: 'малювати привидів на полотні' },
+    { icon: '🍂', text: 'створювати осінній декор' },
+    { icon: '🍪', text: 'розписувати пряники' },
+    { icon: '🎃', text: 'перетворювати гарбузи на маленькі шедеври' },
+    { icon: '🦇', text: 'веселитися на Halloween-вечірках!' },
+  ],
+  events: [
+    {
+      id: 'pryvyd', title: 'Малюємо привида', lead: 'Створюємо власну Halloween-картину на полотні.',
+      poster: '/events/zhovten/pryvyd.jpg', icon: '👻', tone: '#2E5E3E',
+      sessions: [{ place: 'Молодіжний', date: '2026-10-16', time: '18:00' }, { place: 'Раківка', date: '2026-10-17', time: '17:00' }],
+    },
+    {
+      id: 'girlyanda', title: 'Створюємо осінню гірлянду', lead: 'Трохи фантазії, і святковий декор готовий!',
+      poster: '/events/zhovten/girlyanda.jpg', icon: '🍂', tone: '#8E3A17',
+      sessions: [{ place: 'Раківка', date: '2026-10-20', time: '17:00' }],
+    },
+    {
+      id: 'pryanyky', title: 'Пряники, які шкода їсти!', lead: 'Розписуємо солодкі смаколики та створюємо власні їстівні шедеври.',
+      poster: '/events/zhovten/pryanyky.jpg', icon: '🍪', tone: '#F26F21',
+      sessions: [{ place: 'Молодіжний', date: '2026-10-23', time: '17:00' }, { place: 'Раківка', date: '2026-10-24', time: '17:00' }],
+    },
+    {
+      id: 'garbuzy', title: 'Перетворюємо гарбузи на арт!', lead: 'Фарби, фантазія та гарбуз, який буде тільки у твоєї дитини.',
+      poster: '/events/zhovten/garbuzy.jpg', icon: '🎃', tone: '#C2410C',
+      sessions: [
+        { place: 'Молодіжний', date: '2026-10-28', time: '18:00' },
+        { place: 'Раківка', date: '2026-10-29', time: '17:00' },
+        { place: 'Раківка', date: '2026-11-01', time: '14:00' },
+      ],
+    },
+    {
+      id: 'halloween', title: 'Halloween у TVORCHI', lead: 'Готуємося до наймоторошніше-веселої пригоди!',
+      poster: '/events/zhovten/halloween.jpg', icon: '🦇', tone: '#2B1A4F',
+      sessions: [{ place: 'Раківка', date: '2026-10-30', time: '17:00' }, { place: 'Молодіжний', date: '2026-10-31', time: '17:00' }],
+    },
+  ] as SeriesEvent[],
+};
+
+export const sessionKey = (s: SeriesSession) => `${s.date} ${s.time}`;
+/** Заняття ще попереду (з запасом 2 години на сам майстер-клас). */
+export function sessionUpcoming(s: SeriesSession, nowKyiv: string): boolean {
+  const [h, m] = s.time.split(':').map(Number);
+  return `${s.date} ${String(Math.min(23, h + 2)).padStart(2, '0')}:${String(m).padStart(2, '0')}` >= nowKyiv;
+}
+export function sessionLabel(s: SeriesSession): string {
+  const [, mo, d] = s.date.split('-');
+  return `${d}.${mo} · ${s.time}`;
+}
+const SERIES_END = '2026-11-01 16:00';
+
+/* Каждый майстер-клас серии сам появляется в анонсах — с ближайшей датой. */
+function seriesAnnouncements(nowKyiv: string): Announcement[] {
+  return OCT_SERIES.events.flatMap((e) => {
+    const next = e.sessions.filter((s) => sessionUpcoming(s, nowKyiv));
+    if (!next.length) return [];
+    const [h, m] = next[0].time.split(':').map(Number);
+    return [{
+      id: `oct-${e.id}`,
+      title: e.title,
+      cover: e.poster,
+      startsAt: sessionKey(next[0]),
+      endsAt: `${next[0].date} ${String(Math.min(23, h + 2)).padStart(2, '0')}:${String(m).padStart(2, '0')}`,
+      place: [...new Set(next.map((s) => s.place))].join(' · '),
+      short: `${e.lead} ${next.map((s) => `${s.place} ${sessionLabel(s)}`).join(', ')}.`,
+      link: `/anonsy/${OCT_SERIES.slug}#${e.id}`,
+      active: true,
+    }];
+  });
+}
+
 /* ---------- Спецпроєкти как обычные анонсы ----------
    Чтобы табір и поездка сами появлялись в «Що буде найближчим часом» и на /anonsy,
    даже если студия не завела их в админке. Если в админке уже есть такой анонс
@@ -237,6 +321,7 @@ export function withEvents(list: Announcement[], nowKyiv: string): Announcement[
     if (out.some(same)) out = out.map((a) => (same(a) && !a.link ? { ...a, link: sp.href } : a));
     else out = [sp.item, ...out];
   }
+  if (!out.some((a) => a.link?.includes(OCT_SERIES.slug))) out = [...seriesAnnouncements(nowKyiv), ...out];
   return out;
 }
 
@@ -247,6 +332,8 @@ export function activePromos(nowKyiv: string) {
     list.push({ href: `/anonsy/${AUTUMN_TRIP.slug}`, title: 'Осіння пригода: Гарбуз-парк і Ковалівка', when: AUTUMN_TRIP.date, endsAt: AUTUMN_TRIP.endsAt });
   if (nowKyiv <= AUTUMN_CAMP.endsAt)
     list.push({ href: `/anonsy/${AUTUMN_CAMP.slug}`, title: 'Осінній страшний табір', when: AUTUMN_CAMP.dates, endsAt: AUTUMN_CAMP.endsAt });
+  if (nowKyiv <= SERIES_END)
+    list.push({ href: `/anonsy/${OCT_SERIES.slug}`, title: 'Жовтневі майстер-класи: привиди, пряники, гарбузи', when: OCT_SERIES.range, endsAt: SERIES_END });
   if (nowKyiv <= PARTIES.until)
     list.push({ href: `/anonsy/${PARTIES.slug}`, title: 'Halloween-вечірки для вашої компанії', when: 'на вашу дату', endsAt: PARTIES.until });
   return list;

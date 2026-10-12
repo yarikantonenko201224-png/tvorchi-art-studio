@@ -19,7 +19,7 @@ function kyivNow(): string {
   return `${g('year')}-${g('month')}-${g('day')} ${g('hour')}:${g('minute')}`;
 }
 
-const ICONS = ['🍂', '🎃', '🦇'];
+const ICONS = ['🍂', '🎃', '🎨', '🦇'];
 
 export default function SeasonBanner() {
   const path = usePathname();
