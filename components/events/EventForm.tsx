@@ -22,7 +22,16 @@ export interface ChipGroup {
 
 export function pickInForm(key: string, value: string) {
   window.dispatchEvent(new CustomEvent('event-form:set', { detail: { key, value } }));
-  document.getElementById('zapys')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  // крутим к самой форме, а не к заголовку секции, и с учётом липкой шапки
+  const el = document.querySelector<HTMLElement>('#zapys .ev-form') ?? document.getElementById('zapys');
+  if (!el) return;
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const top = el.getBoundingClientRect().top + window.scrollY - 90;
+  window.scrollTo({ top, behavior: reduce ? 'auto' : 'smooth' });
+  // после прокрутки — фокус на поле имени, чтобы сразу вводить
+  // на телефоне не открываем клавиатуру сами — человек должен увидеть, что дата выбрана
+  if (window.matchMedia('(pointer: fine)').matches)
+    window.setTimeout(() => el.querySelector<HTMLInputElement>('input')?.focus({ preventScroll: true }), reduce ? 0 : 700);
 }
 
 export default function EventForm({

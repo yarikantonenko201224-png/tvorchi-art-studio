@@ -9,9 +9,16 @@ export default function Reveal() {
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const root = document.documentElement;
-    root.classList.add('js-rv');
-
     const targets = document.querySelectorAll<HTMLElement>('[data-reveal], .lp-steps');
+
+    /* То, что уже видно на экране при загрузке, не прячем и не анимируем:
+       иначе блоки на долю секунды показываются, исчезают и выезжают снова. */
+    const vh = window.innerHeight;
+    targets.forEach((t) => {
+      const r = t.getBoundingClientRect();
+      if (r.top < vh * 0.92 && r.bottom > 0) t.classList.add('is-in', 'rv-now');
+    });
+    root.classList.add('js-rv');
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) {

@@ -329,12 +329,12 @@ export function withEvents(list: Announcement[], nowKyiv: string): Announcement[
 export function activePromos(nowKyiv: string) {
   const list: { href: string; title: string; when: string; endsAt: string }[] = [];
   if (nowKyiv <= AUTUMN_TRIP.endsAt)
-    list.push({ href: `/anonsy/${AUTUMN_TRIP.slug}`, title: 'Осіння пригода: Гарбуз-парк і Ковалівка', when: AUTUMN_TRIP.date, endsAt: AUTUMN_TRIP.endsAt });
+    list.push({ href: `/anonsy/${AUTUMN_TRIP.slug}`, title: 'Осіння пригода', when: AUTUMN_TRIP.date, endsAt: AUTUMN_TRIP.endsAt });
   if (nowKyiv <= AUTUMN_CAMP.endsAt)
     list.push({ href: `/anonsy/${AUTUMN_CAMP.slug}`, title: 'Осінній страшний табір', when: AUTUMN_CAMP.dates, endsAt: AUTUMN_CAMP.endsAt });
   if (nowKyiv <= SERIES_END)
-    list.push({ href: `/anonsy/${OCT_SERIES.slug}`, title: 'Жовтневі майстер-класи: привиди, пряники, гарбузи', when: OCT_SERIES.range, endsAt: SERIES_END });
+    list.push({ href: `/anonsy/${OCT_SERIES.slug}`, title: 'Жовтневі майстер-класи', when: OCT_SERIES.range, endsAt: SERIES_END });
   if (nowKyiv <= PARTIES.until)
-    list.push({ href: `/anonsy/${PARTIES.slug}`, title: 'Halloween-вечірки для вашої компанії', when: 'на вашу дату', endsAt: PARTIES.until });
+    list.push({ href: `/anonsy/${PARTIES.slug}`, title: 'Halloween-вечірки', when: 'на вашу дату', endsAt: PARTIES.until });
   return list;
 }

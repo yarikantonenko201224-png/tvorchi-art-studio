@@ -240,7 +240,7 @@ body:has(.pv) .ftr{margin-top:0}
 .oc-cal{list-style:none; padding:0; margin:24px 0 0; display:grid; gap:12px}
 @media(min-width:700px){ .oc-cal{grid-template-columns:repeat(2,1fr)} }
 @media(min-width:1050px){ .oc-cal{grid-template-columns:repeat(3,1fr)} }
-.oc-cal-item{display:flex; align-items:center; gap:14px; padding:12px; border-radius:22px; background:#fff; border:2px solid var(--ink-900); box-shadow:0 5px 0 var(--ink-900); text-decoration:none; color:var(--ink-900); transition:transform .25s cubic-bezier(.25,1.35,.45,1), box-shadow .2s}
+.oc-cal-item{width:100%; font:inherit; text-align:left; cursor:pointer; display:flex; align-items:center; gap:14px; padding:12px; border-radius:22px; background:#fff; border:2px solid var(--ink-900); box-shadow:0 5px 0 var(--ink-900); text-decoration:none; color:var(--ink-900); transition:transform .25s cubic-bezier(.25,1.35,.45,1), box-shadow .2s}
 .oc-cal-item:hover{transform:translateY(-3px) rotate(-1deg); box-shadow:0 8px 0 var(--ink-900)}
 .oc-cal-date{display:grid; place-items:center; width:70px; height:70px; flex:none; border-radius:16px; background:var(--tone); color:#fff; text-align:center; line-height:1}
 .oc-cal-date b{font-family:var(--font-head); font-size:30px}
@@ -273,3 +273,4 @@ body:has(.pv) .ftr{margin-top:0}
 .oc-sec--form{margin:64px 8px 40px; padding:56px 0; border-radius:40px; background:#FBF3E4}
 .oc .ev-or{color:var(--ink-700)}
 @media (prefers-reduced-motion: reduce){ .oc-doing li{animation:none} .js-rv .oc [data-reveal]{opacity:1; transform:none} }
+.js-rv .oc [data-reveal].rv-now, .js-rv .pv [data-reveal].rv-now, .js-rv .tr [data-reveal].rv-now{transition:none}

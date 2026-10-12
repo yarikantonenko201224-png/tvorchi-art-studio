@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Reveal from '@/components/home/Reveal';
 import EventForm from '@/components/events/EventForm';
 import SessionChip from '@/components/events/SessionChip';
+import CalendarItem from '@/components/events/CalendarItem';
 import { OCT_SERIES as S, sessionLabel, sessionUpcoming, sessionKey } from '@/lib/events';
 import { nowKyivLocal } from '@/lib/content';
 import { STUDIO } from '@/lib/data';
@@ -67,13 +68,13 @@ export default function OctoberPage() {
               const d = new Date(`${s.date}T12:00:00`);
               return (
                 <li key={e.id + sessionKey(s)} data-reveal style={{ ['--rv-delay' as string]: `${(i % 4) * 0.06}s`, ['--tone' as string]: e.tone }}>
-                  <a href={`#${e.id}`} className="oc-cal-item">
+                  <CalendarItem value={optionOf(e.title, s)}>
                     <span className="oc-cal-date"><b>{d.getDate()}</b><small>{MONTH[d.getMonth()]}, {WEEKDAY[d.getDay()]}</small></span>
                     <span className="oc-cal-body">
                       <b><span aria-hidden="true">{e.icon}</span> {e.title}</b>
                       <small><i className={`oc-dot oc-dot--${s.place === 'Раківка' ? 'r' : 'm'}`} />{s.place} · {s.time}</small>
                     </span>
-                  </a>
+                  </CalendarItem>
                 </li>
               );
             })}

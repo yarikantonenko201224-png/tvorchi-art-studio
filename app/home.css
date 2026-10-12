@@ -451,3 +451,5 @@
 .lp-place-body{padding:20px 22px 24px}
 .lp-place-addr{font-family:var(--font-head); font-weight:700; font-size:18px; color:var(--ink-900) !important; margin-top:4px !important}
 @media(min-width:900px){ .lp-place-map{height:280px} }
+/* блоки, видимые сразу при загрузке, появляются без «выезда» */
+.js-rv [data-reveal].rv-now, .js-rv .lp-steps.rv-now .lp-step{transition:none !important}

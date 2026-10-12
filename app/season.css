@@ -68,5 +68,9 @@
 .hw-banner-dots{display:flex; gap:5px; flex:none}
 .hw-banner-dots i{width:6px; height:6px; border-radius:50%; background:rgba(255,255,255,.3); transition:background .3s, transform .3s}
 .hw-banner-dots i.is-on{background:#FBD668; transform:scale(1.25)}
-@media(max-width:560px){ .hw-banner-dots{display:none} .hw-banner-text{white-space:normal} }
+@media(max-width:560px){ .hw-banner-dots{display:none} }
+/* Лента всегда одной высоты: смена анонса не должна сдвигать страницу */
+.hw-banner{height:46px; padding-top:0; padding-bottom:0; flex-wrap:nowrap}
+.hw-banner-in{flex:1 1 auto; justify-content:center; overflow:hidden}
+@media(max-width:560px){ .hw-banner{height:44px} .hw-banner-in{justify-content:flex-start} .hw-banner-text{font-size:13.5px} }
 @media (prefers-reduced-motion: reduce){ .hw-banner-in{animation:none} }
